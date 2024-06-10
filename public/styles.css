@@ -1,0 +1,338 @@
+/* General Styles */
+body {
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f4;
+  color: #333;
+  background-image: url('images/TimeWise-background.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  position: relative;
+}
+
+body::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(70, 130, 180, 0.2); /* SteelBlue with 20% opacity */
+  z-index: -1;
+}
+
+/* Page Containers */
+#home-page, #about-page, #dashboard, #signup-form, #login-form, #forgot-password-form {
+  background-color: rgba(240, 240, 240, 0.9);
+  padding: 20px;
+  border-radius: 10px;
+  margin: 20px;
+}
+
+/* Logo */
+#logo img {
+  display: block;
+  margin: 20px auto;
+  max-width: 50%;
+  width: 200px;
+  height: auto;
+}
+
+/* Typography */
+h1, h2, h3 {
+  color: #0056b3;
+}
+
+/* Buttons */
+button {
+  background-color: #0056b3;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+button:hover {
+  background-color: #004494;
+}
+
+/* Style for the Get Started button */
+.get-started-button {
+  display: inline-block;
+  font-size: 1.5em; /* Increase the font size */
+  padding: 15px 30px; /* Increase the padding */
+  background-color: #0056b3; /* Blue background */
+  color: #fff; /* White text */
+  text-align: center;
+  text-decoration: none;
+  border-radius: 5px; /* Rounded corners */
+  transition: background-color 0.3s ease; /* Smooth transition for background color */
+}
+
+.get-started-button:hover {
+  background-color: #004494; /* dark blue on hover */
+}
+
+/* Inputs */
+input[type="text"], input[type="email"], input[type="password"], input[type="datetime-local"] {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+/* Navigation Buttons */
+#navigation-buttons {
+  display: none;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+#navigation-buttons button {
+  margin: 0 10px;
+}
+
+/* Authentication Forms */
+#signup-form, #login-form, #forgot-password-form {
+  display: none;
+  max-width: 400px;
+  margin: 50px auto;
+}
+
+#signup-form button, #login-form button, #forgot-password-form button {
+  width: 100%;
+  margin: 5px 0;
+}
+
+.error-message {
+  color: red;
+}
+
+.success-message {
+  color: green;
+}
+
+.password-requirements.invalid {
+  color: red;
+}
+
+.password-requirements.valid {
+  color: green;
+}
+
+/* Home Page */
+#home-page ul {
+  list-style: none;
+  padding: 0;
+}
+
+#home-page ul li {
+  background-color: #fff;
+  margin: 5px 0;
+  padding: 10px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#home-page ul li button {
+  margin-left: 10px;
+  padding: 5px 10px;
+  font-size: 0.9em;
+}
+
+/* About Page */
+#about-page {
+  display: none;
+}
+
+#about-page ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+#about-page ul li {
+  background-color: #fff;
+  margin: 5px 0;
+  padding: 10px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#about-page a {
+  color: #0056b3;
+}
+
+/* Dashboard */
+#dashboard {
+  display: none;
+  padding: 20px;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+}
+
+#dashboard-content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+#dashboard-content > div {
+  flex: 1;
+  min-width: 250px;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.completed {
+  text-decoration: line-through;
+}
+
+.edit-task-input {
+  display: none;
+}
+
+#dashboard h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+#dashboard-content h3 {
+  margin-top: 0;
+}
+
+/* Task Lists */
+#task-list, #daily-task-list, #weekly-task-list, #monthly-task-list, #priority-task-list, #organization-task-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+#task-list li, #daily-task-list li, #weekly-task-list li, #monthly-task-list li, #priority-task-list li, #organization-task-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+#task-list li button, #daily-task-list li button, #weekly-task-list li button, #monthly-task-list li button, #priority-task-list li button, #organization-task-list li button {
+  margin-left: 10px;
+}
+
+/* Pomodoro Timer */
+#pomodoro {
+  text-align: center;
+}
+
+#pomodoro-status.stopped {
+  color: red;
+}
+
+#pomodoro-status.running {
+  color: green;
+}
+
+#timer-display {
+  font-size: 2em;
+  margin: 10px 0;
+}
+
+/* Time Tracking */
+#time-tracking {
+  text-align: center;
+}
+
+#time-tracking-status.stopped {
+  color: red;
+}
+
+#time-tracking-status.running {
+  color: green;
+}
+
+#time-tracking-display {
+  font-size: 2em;
+  margin: 10px 0;
+}
+
+/* Footer */
+#footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: #f8f8f8;
+  padding: 0;
+  box-sizing: border-box;
+  z-index: 999;
+  height: 40px;
+  text-align: center;
+}
+
+/* Media Queries */
+@media (max-width: 1200px) {
+  /* Reduce padding and margins for medium-sized screens */
+  #home-page, #about-page, #dashboard, #signup-form, #login-form, #forgot-password-form {
+    padding: 15px;
+    margin: 15px;
+  }
+
+  #dashboard-content {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Stack navigation buttons vertically on small screens */
+  #navigation-buttons {
+    flex-direction: column;
+  }
+
+  #navigation-buttons button {
+    margin: 10px 0;
+  }
+
+  #logo img {
+    max-width: 70%;
+  }
+
+  #dashboard-content {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Adjust padding and font sizes for very small screens */
+  body {
+    font-size: 14px;
+  }
+
+  button {
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+
+  input[type="text"], input[type="email"], input[type="password"], input[type="datetime-local"] {
+    padding: 8px;
+    font-size: 14px;
+  }
+
+  #dashboard h2 {
+    font-size: 20px;
+  }
+
+  #dashboard-content > div {
+    padding: 10px;
+    min-width: 100%;
+  }
+}
