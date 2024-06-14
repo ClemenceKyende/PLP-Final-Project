@@ -1,11 +1,3 @@
-// Load environment variables from .env file
-const result = require('dotenv').config();
-if (result.error) {
-  console.error('Error loading .env file:', result.error);
-} else {
-  console.log('.env file loaded successfully');
-}
-
 // Import required modules
 const mongoose = require('mongoose');
 const app = require('./app'); // Ensure this path is correct
