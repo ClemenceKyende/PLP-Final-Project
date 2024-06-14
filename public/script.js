@@ -104,57 +104,13 @@ async function signup() {
   }
 }
 
-// Get reference to the buttons
-const signupButton = document.getElementById('signup-button');
-const loginLink = document.getElementById('login-link');
-
 // Attach event listeners
-signupButton.addEventListener('click', signup);
-loginLink.addEventListener('click', showLoginForm);
-
-// Function to display password requirements
-function displayPasswordRequirements() {
-  const passwordRequirements = "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one of the following special characters: @$!%*?&";
-  document.getElementById('password-requirements').textContent = passwordRequirements;
-}
-
-// Function to validate password
-function validatePassword() {
-  const password = document.getElementById('signup-password').value;
-  const passwordRequirementsRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-  const requirementsElement = document.getElementById('password-requirements');
-  
-  if (passwordRequirementsRegex.test(password)) {
-    requirementsElement.textContent = "✓ Password meets requirements.";
-    requirementsElement.classList.remove('invalid');
-    requirementsElement.classList.add('valid');
-  } else {
-    requirementsElement.textContent = "✗ Password does not meet requirements.";
-    requirementsElement.classList.remove('valid');
-    requirementsElement.classList.add('invalid');
-  }
-}
-
-// Add event listener to the password input field to display password requirements when focused
+document.getElementById('signup-button').addEventListener('click', signup);
 document.getElementById('signup-password').addEventListener('focus', displayPasswordRequirements);
-
-// Add event listener to the password input field to validate password
 document.getElementById('signup-password').addEventListener('input', validatePassword);
-
-// Function to toggle password visibility for signup form
-function togglePasswordVisibilitySignup() {
-  const passwordInput = document.getElementById('signup-password');
-  if (passwordInput.type === 'password') {
-    passwordInput.type = 'text';
-  } else {
-    passwordInput.type = 'password';
-  }
-}
-
-// Add event listener to the show password checkbox in signup form
 document.getElementById('show-password-checkbox-signup').addEventListener('change', togglePasswordVisibilitySignup);
 
-  // Function to handle login form submission
+// Function to handle login form submission
 async function login() {
   const email = document.getElementById('email').value;
   const password = document.getElementById('password').value;
@@ -190,51 +146,38 @@ async function login() {
     }
   } catch (error) {
     console.error('Error:', error);
-    document.getElementById('login-error').innerText = 'Incorrect password';
+    document.getElementById('login-error').innerText = 'Server error';
     document.getElementById('login-error').style.display = 'block';
   }
 }
 
-// Get reference to the login button, sign up link, and forgot password link
-const loginButton = document.getElementById('login-button');
-const signUpLink = document.getElementById('signup-link');
-const forgotPasswordLink = document.getElementById('forgot-password-link');
-
 // Attach event listeners
-loginButton.addEventListener('click', login);
-signUpLink.addEventListener('click', showSignupForm);
-forgotPasswordLink.addEventListener('click', showforgotPasswordForm); // Use forgotPasswordLink here
+document.getElementById('login-button').addEventListener('click', login);
+document.getElementById('show-password-checkbox-login').addEventListener('change', togglePasswordVisibilityLogin);
+document.getElementById('signup-link').addEventListener('click', showSignupForm);
+document.getElementById('forgot-password-link').addEventListener('click', showforgotPasswordForm);
+document.getElementById('remember-password-link').addEventListener('click', goToLogin);
+
+// Function to toggle password visibility for signup form
+function togglePasswordVisibilitySignup() {
+  const passwordInput = document.getElementById('signup-password');
+  passwordInput.type = passwordInput.type === 'password' ? 'text' : 'password';
+}
 
 // Function to toggle password visibility for login form
 function togglePasswordVisibilityLogin() {
   const passwordInput = document.getElementById('password');
-  if (passwordInput.type === 'password') {
-    passwordInput.type = 'text';
-  } else {
-    passwordInput.type = 'password';
-  }
+  passwordInput.type = passwordInput.type === 'password' ? 'text' : 'password';
 }
 
-// Add event listener to the show password checkbox in login form
-document.getElementById('show-password-checkbox-login').addEventListener('change', togglePasswordVisibilityLogin);
-
-document.addEventListener('DOMContentLoaded', function() {
-  // Define forgotPasswordForm in a broader scope
+// Function to switch to the login form
+function goToLogin() {
   const forgotPasswordForm = document.getElementById('forgot-password-form');
-
-  // Function to switch to the login form
-  function goToLogin() {
-      if (forgotPasswordForm) {
-          forgotPasswordForm.style.display = 'none';
-      }
-      document.getElementById('login-form').style.display = 'block'; // Show the login form
+  if (forgotPasswordForm) {
+    forgotPasswordForm.style.display = 'none';
   }
-
-  // Get reference to the remember password link
-  const rememberPasswordLink = document.getElementById('remember-password-link');
-
-  // Attach event listener for remember password link click
-  rememberPasswordLink.addEventListener('click', goToLogin);
+  document.getElementById('login-form').style.display = 'block'; // Show the login form
+}
 
   // Define the resetPassword function
   async function resetPassword() {
@@ -275,8 +218,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Attach event listener for reset password button click
   resetPasswordButton.addEventListener('click', resetPassword);
-});
-
 
 async function logout() {
   localStorage.removeItem('token');
