@@ -6,13 +6,9 @@ if (result.error) {
   console.log('.env file loaded successfully');
 }
 
-// Connect to the database
-const connectDB = require('./config/db');
-connectDB(); // Call the connectDB function to establish the connection
-
 // Import required modules
 const mongoose = require('mongoose');
-const app = require('./app');
+const app = require('./app'); // Ensure this path is correct
 
 // Logging environment variables to debug
 console.log('MONGO_URI:', process.env.MONGO_URI);
@@ -29,7 +25,7 @@ if (!process.env.PORT) {
   process.exit(1);
 }
 
-// Database Connection
+// Connect to the database
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -51,6 +47,7 @@ const gracefulShutdown = () => {
 process.on('SIGINT', gracefulShutdown);
 process.on('SIGTERM', gracefulShutdown);
 
+// Start the server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server listening at http://0.0.0.0:${PORT}`);
