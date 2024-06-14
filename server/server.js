@@ -1,7 +1,7 @@
 // Load environment variables from .env file
 const result = require('dotenv').config();
 if (result.error) {
-  connsole.error('Error loading .env file:', result.error);
+  console.error('Error loading .env file:', result.error);
 } else {
   console.log('.env file loaded successfully');
 }
