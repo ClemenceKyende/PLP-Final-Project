@@ -1,5 +1,6 @@
 // Import required modules
 const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs'); // Changed from 'bcrypt' to 'bcryptjs'
 const app = require('./app'); // Ensure this path is correct
 
 // Logging environment variables to debug
