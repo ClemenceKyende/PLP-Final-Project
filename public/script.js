@@ -413,18 +413,110 @@ document.getElementById('add-monthly-task-button').addEventListener('click', () 
   addTask('monthly-task-input', 'monthly-task-list', 'monthly-tasks');
 });
 
+// Function to save a reminder to MongoDB
+async function saveReminderToDB(reminderDate) {
+  try {
+    const response = await fetch('/api/reminders', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ date: reminderDate })
+    });
 
-function setReminder() {
+    if (response.ok) {
+      const data = await response.json();
+      return data.reminderId; // Assuming the server returns the ID of the saved reminder
+    } else {
+      console.error('Failed to save reminder:', response.statusText);
+      return null;
+    }
+  } catch (error) {
+    console.error('Error saving reminder:', error);
+    return null;
+  }
+}
+
+// Function to load reminders from MongoDB
+async function loadRemindersFromDB() {
+  try {
+    const response = await fetch('/api/reminders');
+    if (response.ok) {
+      const data = await response.json();
+      return data.reminders; // Assuming the server returns an array of reminders
+    } else {
+      console.error('Failed to load reminders:', response.statusText);
+      return [];
+    }
+  } catch (error) {
+    console.error('Error loading reminders:', error);
+    return [];
+  }
+}
+
+// Function to display a reminder on the page
+function displayReminder(reminderText, reminderId) {
+  const notifications = document.getElementById('notifications');
+  const reminderItem = document.createElement('div');
+  reminderItem.id = reminderId;
+  reminderItem.innerHTML = `
+    <p>${reminderText}</p>
+    <button onclick="deleteReminder('${reminderId}')">Delete</button>
+  `;
+  notifications.appendChild(reminderItem);
+}
+
+// Function to save a reminder
+async function setReminder() {
   const reminderInput = document.getElementById('reminder-input').value;
   if (reminderInput) {
-    const notifications = document.getElementById('notifications');
-    const reminderItem = document.createElement('p');
-    reminderItem.textContent = `Reminder set for: ${new Date(reminderInput).toLocaleString()}`;
-    notifications.appendChild(reminderItem);
+    const reminderDate = new Date(reminderInput);
+    const reminderText = `Reminder set for: ${reminderDate.toLocaleString()}`;
+
+    // Save to MongoDB
+    const reminderId = await saveReminderToDB(reminderDate);
+
+    // Display on the page
+    if (reminderId) {
+      displayReminder(reminderText, reminderId);
+    } else {
+      alert('Failed to save reminder. Please try again later.');
+    }
+
+    // Clear input field
     document.getElementById('reminder-input').value = '';
   } else {
     alert('Please enter a valid reminder date and time.');
   }
+}
+
+// Function to delete a reminder
+async function deleteReminder(reminderId) {
+  try {
+    const response = await fetch(`/api/reminders/${reminderId}`, {
+      method: 'DELETE'
+    });
+
+    if (response.ok) {
+      document.getElementById(reminderId).remove();
+    } else {
+      console.error('Failed to delete reminder:', response.statusText);
+      alert('Failed to delete reminder. Please try again later.');
+    }
+  } catch (error) {
+    console.error('Error deleting reminder:', error);
+    alert('Failed to delete reminder. Please try again later.');
+  }
+}
+
+// Load reminders when the page loads
+window.onload = async function() {
+  const reminders = await loadRemindersFromDB();
+  reminders.forEach(reminder => {
+    const reminderDate = new Date(reminder.date);
+    const reminderText = `Reminder set for: ${reminderDate.toLocaleString()}`;
+    displayReminder(reminderText, reminder.id);
+  });
 }
 
 // Add event listener to the set reminder button
