@@ -1,3 +1,6 @@
+// Load environment variables from .env file
+require('dotenv').config();
+
 // Import required modules
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs'); // Changed from 'bcrypt' to 'bcryptjs'
