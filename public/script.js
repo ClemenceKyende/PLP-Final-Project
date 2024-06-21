@@ -277,7 +277,7 @@ document.addEventListener('DOMContentLoaded', function() {
   resetPasswordButton.addEventListener('click', resetPassword);
 });
 
-
+//Logout functions
 async function logout() {
   localStorage.removeItem('token');
   document.getElementById('navigation-buttons').style.display = 'none';
@@ -289,238 +289,1059 @@ async function logout() {
   showSection('home'); // Pass the ID of the home section as a string
 }
 
-document.addEventListener('DOMContentLoaded', (event) => {
-  loadTasks();
-});
+//Daily functions
+async function addDailyTask() {
+  const text = document.getElementById('daily-task-input').value;
 
-function saveTasks(taskListId, storageKey) {
-  const taskList = document.getElementById(taskListId);
-  if (!taskList) { // Null check added here
-    console.error(`Element with ID ${taskListId} not found.`);
-    return;
-  }
-  const tasks = [];
-  taskList.querySelectorAll('li').forEach(taskItem => {
-    const taskText = taskItem.querySelector('.task-text').textContent;
-    const isCompleted = taskItem.querySelector('input[type="checkbox"]').checked;
-    tasks.push({ text: taskText, completed: isCompleted });
-  });
-  localStorage.setItem(storageKey, JSON.stringify(tasks));
-}
+  if (text) {
+    try {
+      const response = await fetch('/api/daily', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ text })
+      });
 
-function loadTasks() {
-  loadTaskList('daily-task-list', 'daily-tasks');
-  loadTaskList('weekly-task-list', 'weekly-tasks');
-  loadTaskList('monthly-task-list', 'monthly-tasks');
-}
+      if (response.ok) {
+        const newTask = await response.json();
+        console.log('New daily task created:', newTask);
 
-function loadTaskList(taskListId, storageKey) {
-  const taskList = document.getElementById(taskListId);
-  const tasks = JSON.parse(localStorage.getItem(storageKey)) || [];
-  tasks.forEach(task => {
-    addTaskToList(taskList, task.text, task.completed);
-  });
-}
+        // Create task item
+        const taskItem = document.createElement('li');
+        taskItem.id = `daily-task-${newTask._id}`;
 
-function addTask(taskInputId, taskListId, storageKey) {
-  const taskInput = document.getElementById(taskInputId);
-  const taskList = document.getElementById(taskListId);
-  addTaskToList(taskList, taskInput.value, false);
-  taskInput.value = '';
-  saveTasks(taskListId, storageKey);
-}
+        // Checkbox for completion
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.addEventListener('change', () => toggleTaskCompletion(newTask._id, checkbox.checked, taskItem));
 
-function addTaskToList(taskList, taskText, isCompleted) {
-  const taskItem = document.createElement('li');
+        // Label for the task text
+        const label = document.createElement('label');
+        label.textContent = newTask.text;
+        label.style.marginLeft = '10px';
 
-  const checkbox = document.createElement('input');
-  checkbox.type = 'checkbox';
-  checkbox.checked = isCompleted;
-  checkbox.addEventListener('change', () => {
-    taskTextElement.classList.toggle('completed', checkbox.checked);
-    saveAllTasks();
-  });
+        // Append checkbox and label to task item
+        taskItem.appendChild(checkbox);
+        taskItem.appendChild(label);
 
-  const taskTextElement = document.createElement('span');
-  taskTextElement.textContent = taskText;
-  taskTextElement.className = 'task-text';
-  if (isCompleted) {
-    taskTextElement.classList.add('completed');
-  }
+        // Add Edit and Delete buttons
+        const editButton = document.createElement('button');
+        editButton.textContent = 'Edit';
+        editButton.onclick = () => editDailyTask(newTask._id, taskItem);
 
-  const editInput = document.createElement('input');
-  editInput.type = 'text';
-  editInput.className = 'edit-task-input';
-  editInput.value = taskText;
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Delete';
+        deleteButton.onclick = () => deleteDailyTask(newTask._id, taskItem);
 
-  const editButton = document.createElement('button');
-  editButton.textContent = 'Edit';
-  editButton.className = 'edit-task-button';
-  editButton.addEventListener('click', () => {
-    if (editInput.style.display === 'none') {
-      editInput.style.display = 'inline';
-      taskTextElement.style.display = 'none';
-      editButton.textContent = 'Save';
-    } else {
-      taskTextElement.textContent = editInput.value;
-      editInput.style.display = 'none';
-      taskTextElement.style.display = 'inline';
-      editButton.textContent = 'Edit';
-      saveAllTasks();
+        taskItem.appendChild(editButton);
+        taskItem.appendChild(deleteButton);
+
+        // Append task item to the daily task list
+        const dailyTaskList = document.getElementById('daily-task-list');
+        dailyTaskList.appendChild(taskItem);
+
+        // Clear the input field
+        document.getElementById('daily-task-input').value = '';
+      } else {
+        const errorText = await response.text();
+        console.error('Failed to add daily task:', response.statusText, errorText);
+      }
+    } catch (error) {
+      console.error('Error adding daily task:', error);
     }
-  });
-
-  const deleteButton = document.createElement('button');
-  deleteButton.textContent = 'Delete';
-  deleteButton.className = 'delete-task-button';
-  deleteButton.addEventListener('click', () => {
-  deleteTask(taskItem, 'daily-task-list', 'daily');
-  deleteTask(taskItem, 'weekly-task-list', 'weekly');
-  deleteTask(taskItem, 'monthly-task-list', 'monthly');
-  
-  });
-
-  taskItem.appendChild(checkbox);
-  taskItem.appendChild(taskTextElement);
-  taskItem.appendChild(editInput);
-  taskItem.appendChild(editButton);
-  taskItem.appendChild(deleteButton);
-
-  taskList.appendChild(taskItem);
+  } else {
+    alert('Please enter a task.');
+  }
 }
 
-function deleteTask(taskItem, taskListId, storageKey) {
-  taskItem.remove();
-  saveTasks(taskListId, storageKey);
-}
-
-function saveAllTasks() {
-  saveTasks('daily-task-list', 'daily-tasks');
-  saveTasks('weekly-task-list', 'weekly-tasks');
-  saveTasks('monthly-task-list', 'monthly-tasks');
-}
-
-// Attach event listeners to the add task buttons
-document.getElementById('add-daily-task-button').addEventListener('click', () => {
-  addTask('daily-task-input', 'daily-task-list', 'daily-tasks');
-});
-
-document.getElementById('add-weekly-task-button').addEventListener('click', () => {
-  addTask('weekly-task-input', 'weekly-task-list', 'weekly-tasks');
-});
-
-document.getElementById('add-monthly-task-button').addEventListener('click', () => {
-  addTask('monthly-task-input', 'monthly-task-list', 'monthly-tasks');
-});
-
-// Function to save a reminder to MongoDB
-async function saveReminderToDB(reminderDate) {
+async function toggleTaskCompletion(id, completed, taskItem) {
   try {
-    const response = await fetch('/api/reminders', {
-      method: 'POST',
+    const response = await fetch(`/api/daily/${id}`, {
+      method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ date: reminderDate })
+      body: JSON.stringify({ completed })
     });
 
     if (response.ok) {
-      const data = await response.json();
-      return data.reminderId; // Assuming the server returns the ID of the saved reminder
+      if (completed) {
+        taskItem.style.textDecoration = 'line-through';
+      } else {
+        taskItem.style.textDecoration = 'none';
+      }
     } else {
-      console.error('Failed to save reminder:', response.statusText);
-      return null;
+      console.error('Failed to update task completion:', await response.text());
     }
   } catch (error) {
-    console.error('Error saving reminder:', error);
-    return null;
+    console.error('Error updating task completion:', error);
   }
 }
 
-// Function to load reminders from MongoDB
-async function loadRemindersFromDB() {
-  try {
-    const response = await fetch('/api/reminders');
-    if (response.ok) {
-      const data = await response.json();
-      return data.reminders; // Assuming the server returns an array of reminders
-    } else {
-      console.error('Failed to load reminders:', response.statusText);
-      return [];
+async function editDailyTask(id, taskItem) {
+  const newText = prompt('Enter new task text:', taskItem.textContent);
+
+  if (newText) {
+    try {
+      const response = await fetch(`/api/daily/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ text: newText })
+      });
+
+      if (response.ok) {
+        const updatedTask = await response.json();
+        
+        // Clear existing content in the taskItem
+        taskItem.innerHTML = '';
+
+        // Checkbox for completion
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.addEventListener('change', () => toggleTaskCompletion(updatedTask._id, checkbox.checked, taskItem));
+
+        // Label for the task text
+        const label = document.createElement('label');
+        label.textContent = updatedTask.text;
+        label.style.marginLeft = '10px';
+
+        // Append checkbox and label to task item
+        taskItem.appendChild(checkbox);
+        taskItem.appendChild(label);
+
+        // Add Edit and Delete buttons
+        const editButton = document.createElement('button');
+        editButton.textContent = 'Edit';
+        editButton.onclick = () => editDailyTask(updatedTask._id, taskItem);
+
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Delete';
+        deleteButton.onclick = () => deleteDailyTask(updatedTask._id, taskItem);
+
+        taskItem.appendChild(editButton);
+        taskItem.appendChild(deleteButton);
+      } else {
+        console.error('Failed to update daily task:', await response.text());
+      }
+    } catch (error) {
+      console.error('Error updating daily task:', error);
     }
-  } catch (error) {
-    console.error('Error loading reminders:', error);
-    return [];
-  }
-}
-
-// Function to display a reminder on the page
-function displayReminder(reminderText, reminderId) {
-  const notifications = document.getElementById('notifications');
-  const reminderItem = document.createElement('div');
-  reminderItem.id = reminderId;
-  reminderItem.innerHTML = `
-    <p>${reminderText}</p>
-    <button onclick="deleteReminder('${reminderId}')">Delete</button>
-  `;
-  notifications.appendChild(reminderItem);
-}
-
-// Function to save a reminder
-async function setReminder() {
-  const reminderInput = document.getElementById('reminder-input').value;
-  if (reminderInput) {
-    const reminderDate = new Date(reminderInput);
-    const reminderText = `Reminder set for: ${reminderDate.toLocaleString()}`;
-
-    // Save to MongoDB
-    const reminderId = await saveReminderToDB(reminderDate);
-
-    // Display on the page
-    if (reminderId) {
-      displayReminder(reminderText, reminderId);
-    } else {
-      alert('Failed to save reminder. Please try again later.');
-    }
-
-    // Clear input field
-    document.getElementById('reminder-input').value = '';
   } else {
-    alert('Please enter a valid reminder date and time.');
+    alert('Please enter a new task text.');
   }
 }
 
-// Function to delete a reminder
-async function deleteReminder(reminderId) {
+async function deleteDailyTask(id, taskItem) {
   try {
-    const response = await fetch(`/api/reminders/${reminderId}`, {
+    const response = await fetch(`/api/daily/${id}`, {
       method: 'DELETE'
     });
 
     if (response.ok) {
-      document.getElementById(reminderId).remove();
+      taskItem.remove();
     } else {
-      console.error('Failed to delete reminder:', response.statusText);
-      alert('Failed to delete reminder. Please try again later.');
+      console.error('Failed to delete daily task:', await response.text());
     }
   } catch (error) {
-    console.error('Error deleting reminder:', error);
-    alert('Failed to delete reminder. Please try again later.');
+    console.error('Error deleting daily task:', error);
   }
 }
 
-// Load reminders when the page loads
-window.onload = async function() {
-  const reminders = await loadRemindersFromDB();
-  reminders.forEach(reminder => {
-    const reminderDate = new Date(reminder.date);
-    const reminderText = `Reminder set for: ${reminderDate.toLocaleString()}`;
-    displayReminder(reminderText, reminder.id);
+async function loadDailyTasks() {
+  try {
+    const response = await fetch('/api/daily');
+    if (!response.ok) {
+      throw new Error('Failed to load daily tasks!');
+    }
+    const tasks = await response.json();
+    tasks.forEach(task => displayDailyTask(task)); // Call function to display each task
+  } catch (error) {
+    console.error('Error loading daily tasks:', error.message);
+  }
+}
+
+function displayDailyTask(task) {
+  const dailyTaskList = document.getElementById('daily-task-list');
+  const taskItem = document.createElement('li');
+
+  // Checkbox for completion
+  const checkbox = document.createElement('input');
+  checkbox.type = 'checkbox';
+  checkbox.checked = task.completed; // Set checkbox state based on task.completed
+  checkbox.addEventListener('change', () => toggleTaskCompletion(task._id, checkbox.checked, taskItem));
+
+  // Label for the task text
+  const label = document.createElement('label');
+  label.textContent = task.text;
+  label.style.marginLeft = '10px';
+
+  // Append checkbox and label to task item
+  taskItem.appendChild(checkbox);
+  taskItem.appendChild(label);
+
+  // Add Edit and Delete buttons
+  const editButton = document.createElement('button');
+  editButton.textContent = 'Edit';
+  editButton.onclick = () => editDailyTask(task._id, taskItem);
+
+  const deleteButton = document.createElement('button');
+  deleteButton.textContent = 'Delete';
+  deleteButton.onclick = () => deleteDailyTask(task._id, taskItem);
+
+  taskItem.appendChild(editButton);
+  taskItem.appendChild(deleteButton);
+
+  dailyTaskList.appendChild(taskItem);
+}
+
+document.getElementById('add-daily-task-button').addEventListener('click', addDailyTask);
+
+document.addEventListener('DOMContentLoaded', () => {
+  loadDailyTasks();
+});
+
+//Weekly functions
+async function addWeeklyTask() {
+  const text = document.getElementById('weekly-task-input').value;
+
+  if (text) {
+    try {
+      const response = await fetch('/api/weekly', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ text })
+      });
+
+      if (response.ok) {
+        const newTask = await response.json();
+        console.log('New weekly task created:', newTask);
+
+        // Create task item
+        const taskItem = document.createElement('li');
+        taskItem.id = `weekly-task-${newTask._id}`;
+
+        // Checkbox for completion
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.addEventListener('change', () => toggleTaskCompletion(newTask._id, checkbox.checked, taskItem));
+
+        // Label for the task text
+        const label = document.createElement('label');
+        label.textContent = newTask.text;
+        label.style.marginLeft = '10px';
+
+        // Append checkbox and label to task item
+        taskItem.appendChild(checkbox);
+        taskItem.appendChild(label);
+
+        // Add Edit and Delete buttons
+        const editButton = document.createElement('button');
+        editButton.textContent = 'Edit';
+        editButton.onclick = () => editWeeklyTask(newTask._id, taskItem);
+
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Delete';
+        deleteButton.onclick = () => deleteWeeklyTask(newTask._id, taskItem);
+
+        taskItem.appendChild(editButton);
+        taskItem.appendChild(deleteButton);
+
+        // Append task item to the weekly task list
+        const weeklyTaskList = document.getElementById('weekly-task-list');
+        weeklyTaskList.appendChild(taskItem);
+
+        // Clear the input field
+        document.getElementById('weekly-task-input').value = '';
+      } else {
+        const errorText = await response.text();
+        console.error('Failed to add weekly task:', response.statusText, errorText);
+      }
+    } catch (error) {
+      console.error('Error adding weekly task:', error);
+    }
+  } else {
+    alert('Please enter a task.');
+  }
+}
+
+async function toggleTaskCompletion(id, completed, taskItem) {
+  try {
+    const response = await fetch(`/api/weekly/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ completed })
+    });
+
+    if (response.ok) {
+      if (completed) {
+        taskItem.style.textDecoration = 'line-through';
+      } else {
+        taskItem.style.textDecoration = 'none';
+      }
+    } else {
+      console.error('Failed to update task completion:', await response.text());
+    }
+  } catch (error) {
+    console.error('Error updating task completion:', error);
+  }
+}
+
+async function editWeeklyTask(id, taskItem) {
+  const newText = prompt('Enter new task text:', taskItem.textContent);
+
+  if (newText) {
+    try {
+      const response = await fetch(`/api/weekly/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ text: newText })
+      });
+
+      if (response.ok) {
+        const updatedTask = await response.json();
+        
+        // Clear existing content in the taskItem
+        taskItem.innerHTML = '';
+
+        // Checkbox for completion
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.addEventListener('change', () => toggleTaskCompletion(updatedTask._id, checkbox.checked, taskItem));
+
+        // Label for the task text
+        const label = document.createElement('label');
+        label.textContent = updatedTask.text;
+        label.style.marginLeft = '10px';
+
+        // Append checkbox and label to task item
+        taskItem.appendChild(checkbox);
+        taskItem.appendChild(label);
+
+        // Add Edit and Delete buttons
+        const editButton = document.createElement('button');
+        editButton.textContent = 'Edit';
+        editButton.onclick = () => editWeeklyTask(updatedTask._id, taskItem);
+
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Delete';
+        deleteButton.onclick = () => deleteWeeklyTask(updatedTask._id, taskItem);
+
+        taskItem.appendChild(editButton);
+        taskItem.appendChild(deleteButton);
+      } else {
+        console.error('Failed to update weekly task:', await response.text());
+      }
+    } catch (error) {
+      console.error('Error updating weekly task:', error);
+    }
+  } else {
+    alert('Please enter a new task text.');
+  }
+}
+
+async function deleteWeeklyTask(id, taskItem) {
+  try {
+    const response = await fetch(`/api/weekly/${id}`, {
+      method: 'DELETE'
+    });
+
+    if (response.ok) {
+      taskItem.remove();
+    } else {
+      console.error('Failed to delete weekly task:', await response.text());
+    }
+  } catch (error) {
+    console.error('Error deleting weekly task:', error);
+  }
+}
+
+async function loadWeeklyTasks() {
+  try {
+    const response = await fetch('/api/weekly');
+    if (!response.ok) {
+      throw new Error('Failed to load weekly tasks!');
+    }
+    const tasks = await response.json();
+    tasks.forEach(task => displayWeeklyTask(task)); // Call function to display each task
+  } catch (error) {
+    console.error('Error loading weekly tasks:', error.message);
+  }
+}
+
+function displayWeeklyTask(task) {
+  const weeklyTaskList = document.getElementById('weekly-task-list');
+  const taskItem = document.createElement('li');
+
+  // Checkbox for completion
+  const checkbox = document.createElement('input');
+  checkbox.type = 'checkbox';
+  checkbox.checked = task.completed; // Set checkbox state based on task.completed
+  checkbox.addEventListener('change', () => toggleTaskCompletion(task._id, checkbox.checked, taskItem));
+
+  // Label for the task text
+  const label = document.createElement('label');
+  label.textContent = task.text;
+  label.style.marginLeft = '10px';
+
+  // Append checkbox and label to task item
+  taskItem.appendChild(checkbox);
+  taskItem.appendChild(label);
+
+  // Add Edit and Delete buttons
+  const editButton = document.createElement('button');
+  editButton.textContent = 'Edit';
+  editButton.onclick = () => editWeeklyTask(task._id, taskItem);
+
+  const deleteButton = document.createElement('button');
+  deleteButton.textContent = 'Delete';
+  deleteButton.onclick = () => deleteWeeklyTask(task._id, taskItem);
+
+  taskItem.appendChild(editButton);
+  taskItem.appendChild(deleteButton);
+
+  weeklyTaskList.appendChild(taskItem);
+}
+
+document.getElementById('add-weekly-task-button').addEventListener('click', addWeeklyTask);
+
+document.addEventListener('DOMContentLoaded', () => {
+  loadWeeklyTasks();
+});
+
+//Monthly functions
+async function addMonthlyTask() {
+  const text = document.getElementById('monthly-task-input').value;
+
+  if (text) {
+    try {
+      const response = await fetch('/api/monthly', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ text })
+      });
+
+      if (response.ok) {
+        const newTask = await response.json();
+        console.log('New monthly task created:', newTask);
+
+        // Create task item
+        const taskItem = document.createElement('li');
+        taskItem.id = `monthly-task-${newTask._id}`;
+
+        // Checkbox for completion
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.addEventListener('change', () => toggleTaskCompletion(newTask._id, checkbox.checked, taskItem));
+
+        // Label for the task text
+        const label = document.createElement('label');
+        label.textContent = newTask.text;
+        label.style.marginLeft = '10px';
+
+        // Append checkbox and label to task item
+        taskItem.appendChild(checkbox);
+        taskItem.appendChild(label);
+
+        // Add Edit and Delete buttons
+        const editButton = document.createElement('button');
+        editButton.textContent = 'Edit';
+        editButton.onclick = () => editMonthlyTask(newTask._id, taskItem);
+
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Delete';
+        deleteButton.onclick = () => deleteMonthlyTask(newTask._id, taskItem);
+
+        taskItem.appendChild(editButton);
+        taskItem.appendChild(deleteButton);
+
+        // Append task item to the monthly task list
+        const monthlyTaskList = document.getElementById('monthly-task-list');
+        monthlyTaskList.appendChild(taskItem);
+
+        // Clear the input field
+        document.getElementById('monthly-task-input').value = '';
+      } else {
+        const errorText = await response.text();
+        console.error('Failed to add monthly task:', response.statusText, errorText);
+      }
+    } catch (error) {
+      console.error('Error adding monthly task:', error);
+    }
+  } else {
+    alert('Please enter a task.');
+  }
+}
+
+async function toggleTaskCompletion(id, completed, taskItem) {
+  try {
+    const response = await fetch(`/api/monthly/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ completed })
+    });
+
+    if (response.ok) {
+      if (completed) {
+        taskItem.style.textDecoration = 'line-through';
+      } else {
+        taskItem.style.textDecoration = 'none';
+      }
+    } else {
+      console.error('Failed to update task completion:', await response.text());
+    }
+  } catch (error) {
+    console.error('Error updating task completion:', error);
+  }
+}
+
+async function editMonthlyTask(id, taskItem) {
+  const newText = prompt('Enter new task text:', taskItem.textContent);
+
+  if (newText) {
+    try {
+      const response = await fetch(`/api/monthly/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ text: newText })
+      });
+
+      if (response.ok) {
+        const updatedTask = await response.json();
+        
+        // Clear existing content in the taskItem
+        taskItem.innerHTML = '';
+
+        // Checkbox for completion
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.addEventListener('change', () => toggleTaskCompletion(updatedTask._id, checkbox.checked, taskItem));
+
+        // Label for the task text
+        const label = document.createElement('label');
+        label.textContent = updatedTask.text;
+        label.style.marginLeft = '10px';
+
+        // Append checkbox and label to task item
+        taskItem.appendChild(checkbox);
+        taskItem.appendChild(label);
+
+        // Add Edit and Delete buttons
+        const editButton = document.createElement('button');
+        editButton.textContent = 'Edit';
+        editButton.onclick = () => editMonthlyTask(updatedTask._id, taskItem);
+
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Delete';
+        deleteButton.onclick = () => deleteMonthlyTask(updatedTask._id, taskItem);
+
+        taskItem.appendChild(editButton);
+        taskItem.appendChild(deleteButton);
+      } else {
+        console.error('Failed to update monthly task:', await response.text());
+      }
+    } catch (error) {
+      console.error('Error updating monthly task:', error);
+    }
+  } else {
+    alert('Please enter a new task text.');
+  }
+}
+
+async function deleteMonthlyTask(id, taskItem) {
+  try {
+    const response = await fetch(`/api/monthly/${id}`, {
+      method: 'DELETE'
+    });
+
+    if (response.ok) {
+      taskItem.remove();
+    } else {
+      console.error('Failed to delete monthly task:', await response.text());
+    }
+  } catch (error) {
+    console.error('Error deleting monthly task:', error);
+  }
+}
+
+async function loadMonthlyTasks() {
+  try {
+    const response = await fetch('/api/monthly');
+    if (!response.ok) {
+      throw new Error('Failed to load monthly tasks!');
+    }
+    const tasks = await response.json();
+    displayMonthlyTasks(tasks);
+  } catch (error) {
+    console.error('Error loading monthly tasks:', error.message);
+  }
+}
+
+function displayMonthlyTasks(tasks) {
+  const monthlyTaskList = document.getElementById('monthly-task-list');
+  monthlyTaskList.innerHTML = ''; // Clear existing list
+
+  tasks.forEach(task => {
+    const taskItem = document.createElement('li');
+
+    // Checkbox for completion
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.checked = task.completed; // Set checkbox state based on task.completed
+    checkbox.addEventListener('change', () => toggleTaskCompletion(task._id, checkbox.checked, taskItem));
+
+    // Label for the task text
+    const label = document.createElement('label');
+    label.textContent = task.text;
+    label.style.marginLeft = '10px';
+
+    // Append checkbox and label to task item
+    taskItem.appendChild(checkbox);
+    taskItem.appendChild(label);
+
+    // Add Edit and Delete buttons
+    const editButton = document.createElement('button');
+    editButton.textContent = 'Edit';
+    editButton.onclick = () => editMonthlyTask(task._id, taskItem);
+
+    const deleteButton = document.createElement('button');
+    deleteButton.textContent = 'Delete';
+    deleteButton.onclick = () => deleteMonthlyTask(task._id, taskItem);
+
+    taskItem.appendChild(editButton);
+    taskItem.appendChild(deleteButton);
+
+    monthlyTaskList.appendChild(taskItem);
   });
 }
 
-// Add event listener to the set reminder button
-document.getElementById('set-reminder-button').addEventListener('click', setReminder);
+document.addEventListener('DOMContentLoaded', () => {
+  loadMonthlyTasks();
+});
+function displayMonthlyTasks(tasks) {
+  const monthlyTaskList = document.getElementById('monthly-task-list');
+  monthlyTaskList.innerHTML = ''; // Clear existing list
+
+  tasks.forEach(task => {
+    const taskItem = document.createElement('li');
+
+    // Checkbox for completion
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.checked = task.completed; // Set checkbox state based on task.completed
+    checkbox.addEventListener('change', () => toggleTaskCompletion(task._id, checkbox.checked, taskItem));
+
+    // Label for the task text
+    const label = document.createElement('label');
+    label.textContent = task.text;
+    label.style.marginLeft = '10px';
+
+    // Append checkbox and label to task item
+    taskItem.appendChild(checkbox);
+    taskItem.appendChild(label);
+
+    // Add Edit and Delete buttons
+    const editButton = document.createElement('button');
+    editButton.textContent = 'Edit';
+    editButton.onclick = () => editMonthlyTask(task._id, taskItem);
+
+    const deleteButton = document.createElement('button');
+    deleteButton.textContent = 'Delete';
+    deleteButton.onclick = () => deleteMonthlyTask(task._id, taskItem);
+
+    taskItem.appendChild(editButton);
+    taskItem.appendChild(deleteButton);
+
+    monthlyTaskList.appendChild(taskItem);
+  });
+}
+
+document.getElementById('add-monthly-task-button').addEventListener('click', addMonthlyTask);
+
+document.addEventListener('DOMContentLoaded', () => {
+  loadMonthlyTasks();
+});
+
+async function addPriorityTask() {
+  const text = document.getElementById('priority-task-input').value;
+  const level = document.getElementById('priority-level-input').value;
+
+  console.log('Add Priority Task button clicked');
+
+  if (text && level) {
+    try {
+      const response = await fetch('/api/priority', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ text, level })
+      });
+
+      console.log('Fetch request sent', response);
+
+      if (response.ok) {
+        const newTask = await response.json();
+        console.log('New priority task created:', newTask);
+
+        // Append the new task to the priority task list
+        const priorityTaskList = document.getElementById('priority-task-list');
+        const newTaskItem = document.createElement('li');
+        newTaskItem.textContent = `${newTask.level.toUpperCase()}: ${newTask.text}`;
+
+        // Add Edit and Delete buttons
+        const editButton = document.createElement('button');
+        editButton.textContent = 'Edit';
+        editButton.onclick = () => editTask(newTask._id, 'priority', newTaskItem);
+
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Delete';
+        deleteButton.onclick = () => deleteTask(newTask._id, 'priority', newTaskItem);
+
+        newTaskItem.appendChild(editButton);
+        newTaskItem.appendChild(deleteButton);
+        priorityTaskList.appendChild(newTaskItem);
+
+        // Clear the input fields
+        document.getElementById('priority-task-input').value = '';
+        document.getElementById('priority-level-input').value = '';
+      } else {
+        const errorText = await response.text();
+        console.error('Failed to add priority task:', response.statusText, errorText);
+      }
+    } catch (error) {
+      console.error('Error adding priority task:', error);
+    }
+  } else {
+    alert('Please enter both a task and a priority level.');
+  }
+}
+
+async function editTask(id, type, taskItem) {
+  const newText = prompt('Enter new task text:', taskItem.firstChild.textContent.split(': ')[1]);
+  const newLevelOrCategory = prompt(`Enter new ${type === 'priority' ? 'priority level' : 'category'}:`, '');
+
+  if (newText && newLevelOrCategory) {
+    const response = await fetch(`/api/${type}/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ text: newText, level: newLevelOrCategory })
+    });
+
+    if (response.ok) {
+      const updatedTask = await response.json();
+      taskItem.firstChild.textContent = `${updatedTask.level.toUpperCase()}: ${updatedTask.text}`;
+    } else {
+      console.error('Failed to update task:', await response.text());
+    }
+  } else {
+    alert('Please enter both a task and a priority level/category.');
+  }
+}
+
+async function deleteTask(id, type, taskItem) {
+  const response = await fetch(`/api/${type}/${id}`, {
+    method: 'DELETE'
+  });
+
+  if (response.ok) {
+    taskItem.remove();
+  } else {
+    console.error('Failed to delete task:', await response.text());
+  }
+}
+
+async function addOrganizedTask() {
+  const text = document.getElementById('organized-task-input').value;
+  const category = document.getElementById('category-input').value;
+
+  if (text && category) {
+    try {
+      const response = await fetch('/api/organized', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ text, category })
+      });
+
+      if (response.ok) {
+        const newTask = await response.json();
+        console.log('New organized task created:', newTask);
+
+        // Append the new task to the organized task list
+        const organizedTaskList = document.getElementById('organized-task-list');
+        const newTaskItem = document.createElement('li');
+        newTaskItem.textContent = `${newTask.category.toUpperCase()}: ${newTask.text}`;
+
+        // Add Edit and Delete buttons
+        const editButton = document.createElement('button');
+        editButton.textContent = 'Edit';
+        editButton.onclick = () => editTask(newTask._id, 'organized', newTaskItem);
+
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Delete';
+        deleteButton.onclick = () => deleteTask(newTask._id, 'organized', newTaskItem);
+
+        newTaskItem.appendChild(editButton);
+        newTaskItem.appendChild(deleteButton);
+        organizedTaskList.appendChild(newTaskItem);
+
+        // Clear the input fields
+        document.getElementById('organized-task-input').value = '';
+        document.getElementById('category-input').value = '';
+      } else {
+        const errorText = await response.text();
+        console.error('Failed to add organized task:', response.statusText, errorText);
+      }
+    } catch (error) {
+      console.error('Error adding organized task:', error);
+    }
+  } else {
+    alert('Please enter both a task and a category.');
+  }
+}
+
+async function editTask(id, type, taskItem) {
+  const newText = prompt('Enter new task text:', taskItem.firstChild.textContent.split(': ')[1]);
+  const newLevelOrCategory = prompt(`Enter new ${type === 'priority' ? 'priority level' : 'category'}:`, '');
+
+  if (newText && newLevelOrCategory) {
+    const response = await fetch(`/api/${type}/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ text: newText, [type === 'priority' ? 'level' : 'category']: newLevelOrCategory })
+    });
+
+    if (response.ok) {
+      const updatedTask = await response.json();
+      taskItem.firstChild.textContent = `${updatedTask[type === 'priority' ? 'level' : 'category'].toUpperCase()}: ${updatedTask.text}`;
+    } else {
+      console.error('Failed to update task:', await response.text());
+    }
+  } else {
+    alert('Please enter both a task and a priority level/category.');
+  }
+}
+
+async function deleteTask(id, type, taskItem) {
+  const response = await fetch(`/api/${type}/${id}`, {
+    method: 'DELETE'
+  });
+
+  if (response.ok) {
+    taskItem.remove();
+  } else {
+    console.error('Failed to delete task:', await response.text());
+  }
+}
+
+// Add event listener for the priority task button
+document.getElementById('add-priority-task-button').addEventListener('click', addPriorityTask);
+
+// Add event listener for the organized task button
+document.getElementById('add-organized-task-button').addEventListener('click', addOrganizedTask);
+
+// Function to load tasks
+async function loadTasks() {
+  try {
+    const priorityResponse = await fetch('/api/priority');
+    const organizedResponse = await fetch('/api/organized');
+
+    if (priorityResponse.ok && organizedResponse.ok) {
+      const priorityTasks = await priorityResponse.json();
+      const organizedTasks = await organizedResponse.json();
+
+      displayTasks(priorityTasks, 'priority-task-list', 'priority');
+      displayTasks(organizedTasks, 'organized-task-list', 'organized');
+    } else {
+      console.error('Failed to load tasks');
+    }
+  } catch (error) {
+    console.error('Error loading tasks:', error);
+  }
+}
+
+function displayTasks(tasks, listId, type) {
+  const taskList = document.getElementById(listId);
+  taskList.innerHTML = '';
+
+  tasks.forEach(task => {
+    const taskItem = document.createElement('li');
+    taskItem.textContent = `${task[type === 'priority' ? 'level' : 'category'].toUpperCase()}: ${task.text}`;
+
+    // Add Edit and Delete buttons
+    const editButton = document.createElement('button');
+    editButton.textContent = 'Edit';
+    editButton.onclick = () => editTask(task._id, type, taskItem);
+
+    const deleteButton = document.createElement('button');
+    deleteButton.textContent = 'Delete';
+    deleteButton.onclick = () => deleteTask(task._id, type, taskItem);
+
+    taskItem.appendChild(editButton);
+    taskItem.appendChild(deleteButton);
+    taskList.appendChild(taskItem);
+  });
+}
+
+// Load tasks on page load
+document.addEventListener('DOMContentLoaded', () => {
+  loadTasks();
+});
+
+async function loadReminders(user_id) {
+  try {
+    const response = await fetch(`/api/reminders/reminders/${user_id}`);
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch reminders');
+    }
+
+    const reminders = await response.json();
+    displayReminders(reminders); // Call function to display reminders in the UI
+  } catch (error) {
+    console.error('Error loading reminders:', error.message);
+    displayErrorMessage('Failed to load reminders. Please try again.');
+  }
+}
+
+async function addReminder(event) {
+  event.preventDefault(); 
+
+  const text = document.getElementById('reminder-text').value;
+  const datetime = document.getElementById('reminder-datetime').value;
+  const user_id = '6098c5943e39e40015b2a4f7'; 
+
+  try {
+    const response = await fetch('/api/reminders/reminder', { 
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ text, datetime, user_id })
+    });
+
+    if (response.ok) {
+      const newReminder = await response.json();
+      console.log('New reminder created:', newReminder);
+      appendReminderToList(newReminder); // Add new reminder to the list
+      clearForm(); // Clear the form fields
+    } else {
+      const errorText = await response.text();
+      console.error('Failed to add reminder:', errorText);
+    }
+  } catch (error) {
+    console.error('Error adding reminder:', error);
+    // Handle network or other errors
+  }
+}
+
+function appendReminderToList(reminder) {
+  const reminderList = document.getElementById('reminder-list');
+  const reminderElement = createReminderElement(reminder);
+  reminderList.appendChild(reminderElement);
+}
+
+function createReminderElement(reminder) {
+  const li = document.createElement('li');
+  li.setAttribute('data-id', reminder._id); // Set data-id for easier identification
+
+  // Display reminder text and datetime
+  const reminderText = document.createElement('span');
+  reminderText.textContent = `${reminder.text} - ${new Date(reminder.datetime).toLocaleString()}`;
+
+  // Edit button
+  const editButton = document.createElement('button');
+  editButton.textContent = 'Edit';
+  editButton.onclick = () => editReminder(reminder._id); // Assuming editReminder function is defined
+
+  // Delete button
+  const deleteButton = document.createElement('button');
+  deleteButton.textContent = 'Delete';
+  deleteButton.onclick = () => deleteReminder(reminder._id, li); // Assuming deleteReminder function is defined
+
+  // Append elements to the list item
+  li.appendChild(reminderText);
+  li.appendChild(editButton);
+  li.appendChild(deleteButton);
+
+  return li; 
+}
+
+function clearForm() {
+  document.getElementById('reminder-text').value = '';
+  document.getElementById('reminder-datetime').value = '';
+}
+
+const addReminderForm = document.getElementById('add-reminder-form');
+addReminderForm.addEventListener('submit', addReminder);
+
+async function editReminder(id) {
+  const newText = prompt('Enter new reminder text:');
+
+  if (newText) {
+    try {
+      const response = await fetch(`/api/reminders/reminder/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ text: newText })
+      });
+
+      if (response.ok) {
+        const updatedReminder = await response.json();
+        // Update the text in the DOM
+        const listItem = document.querySelector(`#reminder-list li[data-id="${id}"]`);
+        if (listItem) {
+          // Update text content
+          listItem.querySelector('span').textContent = `${updatedReminder.text} - ${new Date(updatedReminder.datetime).toLocaleString()}`;
+        }
+      } else {
+        console.error('Failed to update reminder:', await response.text());
+      }
+    } catch (error) {
+      console.error('Error updating reminder:', error);
+    }
+  } else {
+    alert('Please enter a new reminder text.');
+  }
+}
+
+async function deleteReminder(id, listItem) {
+  try {
+    const response = await fetch(`/api/reminders/reminder/${id}`, {
+      method: 'DELETE'
+    });
+
+    if (response.ok) {
+      listItem.remove(); // Remove the reminder from the DOM
+    } else {
+      console.error('Failed to delete reminder:', await response.text());
+    }
+  } catch (error) {
+    console.error('Error deleting reminder:', error);
+  }
+}
 
 //pomodoro function
 let pomodoroInterval;
@@ -607,67 +1428,3 @@ function updateTimeTracking() {
 // Add event listeners for start and stop buttons
 document.getElementById('start-time-tracking').addEventListener('click', startTimeTracking);
 document.getElementById('stop-time-tracking').addEventListener('click', stopTimeTracking);
-
-function addPriorityTask() {
-  const priorityTaskList = document.getElementById('priority-task-list');
-  const prioritizationInput = document.getElementById('prioritization-input').value;
-  const priorityLevel = document.getElementById('priority-level').value;
-  if (prioritizationInput && priorityLevel) {
-    const priorityTaskItem = document.createElement('li');
-    priorityTaskItem.textContent = `${priorityLevel.toUpperCase()}: ${prioritizationInput}`;
-    priorityTaskList.appendChild(priorityTaskItem);
-    document.getElementById('prioritization-input').value = '';
-
-    // Save the task to localStorage
-    saveTaskToStorage('priorityTasks', { text: prioritizationInput, category: priorityLevel });
-  } else {
-    alert('Please enter both a task and a priority level.');
-  }
-}
-
-function addOrganizedTask() {
-  const organizationTaskList = document.getElementById('organization-task-list');
-  const organizationInput = document.getElementById('organization-input').value;
-  const category = document.getElementById('category').value;
-  if (organizationInput && category) {
-    const organizationTaskItem = document.createElement('li');
-    organizationTaskItem.textContent = `${category.toUpperCase()}: ${organizationInput}`;
-    organizationTaskList.appendChild(organizationTaskItem);
-    document.getElementById('organization-input').value = '';
-
-    // Save the task to localStorage
-    saveTaskToStorage('organizedTasks', { text: organizationInput, category: category });
-  } else {
-    alert('Please enter both a task and a category.');
-  }
-}
-
-// Function to save task to localStorage
-function saveTaskToStorage(key, task) {
-  const tasks = JSON.parse(localStorage.getItem(key)) || [];
-  tasks.push(task);
-  localStorage.setItem(key, JSON.stringify(tasks));
-}
-
-// Add event listener for the priority task button
-document.getElementById('add-priority-task-button').addEventListener('click', addPriorityTask);
-
-// Add event listener for the organized task button
-document.getElementById('add-organized-task-button').addEventListener('click', addOrganizedTask);
-
-// Load tasks from localStorage when the page loads
-document.addEventListener('DOMContentLoaded', () => {
-  loadTasksFromStorage('priorityTasks', 'priority-task-list');
-  loadTasksFromStorage('organizedTasks', 'organization-task-list');
-});
-
-// Function to load tasks from localStorage
-function loadTasksFromStorage(key, listId) {
-  const tasks = JSON.parse(localStorage.getItem(key)) || [];
-  const taskList = document.getElementById(listId);
-  tasks.forEach(task => {
-    const taskItem = document.createElement('li');
-    taskItem.textContent = `${task.category.toUpperCase()}: ${task.text}`;
-    taskList.appendChild(taskItem);
-  });
-}

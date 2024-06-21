@@ -213,12 +213,12 @@ input[type="text"], input[type="email"], input[type="password"], input[type="dat
 }
 
 /* Task Lists */
-#task-list, #daily-task-list, #weekly-task-list, #monthly-task-list, #priority-task-list, #organization-task-list {
+#task-list, #daily-task-list, #weekly-task-list, #monthly-task-list, #priority-task-list, #organized-task-list {
   list-style-type: none;
   padding: 0;
 }
 
-#task-list li, #daily-task-list li, #weekly-task-list li, #monthly-task-list li, #priority-task-list li, #organization-task-list li {
+#task-list li, #daily-task-list li, #weekly-task-list li, #monthly-task-list li, #priority-task-list li, #organized-task-list li {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -226,7 +226,7 @@ input[type="text"], input[type="email"], input[type="password"], input[type="dat
   border-bottom: 1px solid #ccc;
 }
 
-#task-list li button, #daily-task-list li button, #weekly-task-list li button, #monthly-task-list li button, #priority-task-list li button, #organization-task-list li button {
+#task-list li button, #daily-task-list li button, #weekly-task-list li button, #monthly-task-list li button, #priority-task-list li button, #organized-task-list li button {
   margin-left: 10px;
 }
 
@@ -335,4 +335,31 @@ input[type="text"], input[type="email"], input[type="password"], input[type="dat
     padding: 10px;
     min-width: 100%;
   }
+}
+
+/* CSS Styles */
+#reminders {
+  max-width: 450px; /* Adjust the maximum width as needed */
+  margin: 0 auto; /* Center the section horizontally */
+  padding: 20px; /* Add padding for spacing */
+}
+
+#add-reminder-form {
+  width: 100%; /* Ensure the form spans the entire width of its container */
+}
+
+#add-reminder-form label,
+#add-reminder-form input,
+#add-reminder-form button {
+  width: 100%; /* Make input fields and buttons full-width */
+  box-sizing: border-box; /* Include padding and border in the element's total width */
+  margin-bottom: 10px; /* Add margin between form elements */
+}
+
+#reminder-text {
+  width: calc(100% - 120px); /* Adjust width of input fields */
+}
+
+#add-reminder-button {
+  width: 120px; /* Adjust width of buttons */
 }

@@ -1,17 +1,18 @@
-require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
+const bodyParser = require('body-parser'); // Add this line
 
 const app = express();
 
 // Middleware
-app.use(express.json());
+app.use(bodyParser.json()); // Add this line
+app.use(bodyParser.urlencoded({ extended: true })); // Add this line
 app.use(cors());
-app.use(helmet());
+app.use(helmet()); 
 app.use(morgan('tiny'));
 
 // Serve static files from the 'public' directory
@@ -19,21 +20,25 @@ app.use(express.static(path.join(__dirname, '..', 'public')));
 
 // Routes
 const authRoutes = require('./routes/authRoutes');
+const taskRoutes = require('./routes/taskRoutes');
+const reminderRoutes = require('./routes/reminderRoutes');
+
 app.use('/api/auth', authRoutes);
+app.use('/api', taskRoutes);
+app.use('/api/reminders', reminderRoutes);
 
-// Import the User model
-const User = require('./models/User');
 
-// Route to fetch all users
-app.get('/api/users', async (req, res) => {
-  try {
-    const users = await User.find();
-    res.json(users);
-  } catch (error) {
-    console.error('Error fetching users:', error);
-    res.status(500).json({ error: 'Server error' });
-  }
-});
+// MongoDB Connection
+const mongoURI = process.env.MONGO_URI || 'your_default_mongo_uri';
+mongoose.connect(mongoURI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+})
+  .then(() => console.log('Connected to MongoDB'))
+  .catch(err => {
+    console.error('MongoDB connection error:', err);
+    process.exit(1); // Exit the application if the database connection fails
+  });
 
 // Serve index.html on the root route
 app.get('/', (req, res) => {

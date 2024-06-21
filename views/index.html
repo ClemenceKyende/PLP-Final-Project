@@ -101,11 +101,11 @@
   <div id="about-page">
     <h2>About TimeWise</h2>
     <h3>Overview</h3>
-    <p>TimeWise is dedicated to helping individuals manage their tasks, track their time, and improve their productivity. Our mission is to empower users to achieve their goals efficiently and effectively.</p>
+    <p>TimeWise is dedicated to helping individuals manage their tasks, track their time, and improve their productivity. My mission is to empower users to achieve their goals efficiently and effectively.</p>
     <h3>Development Team</h3>
-    <p>Our team consists of experienced developers and productivity enthusiasts who are passionate about creating valuable tools to enhance productivity. We are committed to continuous improvement and innovation.</p>
+    <p> Currently TimeWise is a Solo Endeavor with Future Expansion.I am seeking individuals with technical skills, marketing experience, and industry knowledge.</p>
     <h3>Contact Information</h3>
-    <p>If you have any questions, feedback, or need support, please reach out to us at:</p>
+    <p>If you have any questions, feedback, or need support, please reach out to me at:</p>
     <ul>
       <li>Email: app.timewise@gmail.com</li>
       <li>Phone: +254 711870479</li>
@@ -114,13 +114,13 @@
     <h3>FAQs</h3>
     <p><strong>Q:</strong> How do I sign up for TimeWise?<br><strong>A:</strong> Click on the Sign Up button on the login page and fill in your details.</p>
     <p><strong>Q:</strong> How can I reset my password?<br><strong>A:</strong> Click on the Forgot Password link on the login page and follow the instructions.</p>
-    <p><strong>Q:</strong> Is TimeWise free to use?<br><strong>A:</strong> Yes, TimeWise offers a free plan with essential features. Additional premium features are available for a subscription.</p>
+    <p><strong>Q:</strong> Is TimeWise free to use?<br><strong>A:</strong> Yes, TimeWise  currently operates on a Freemium revenue model, offering a free tier with basic features to all users. The app's priority at this stage is to attract users and build a strong community before considering premium features or subscription plans.</p>
     <h3>Acknowledgments</h3>
-    <p>We would like to thank our users and the open-source community for their valuable contributions and support.</p>
+    <p>I would like to thank my users and the open-source community for their valuable contributions and support.</p>
     <h3>License</h3>
     <p>TimeWise is licensed under the MIT License. You can view the full license <a href="https://opensource.org/licenses/MIT" target="_blank">here</a>.</p>
     <h3>Roadmap</h3>
-    <p>We have exciting plans for the future of TimeWise! Here are some features we're considering for upcoming updates:</p>
+    <p>I have exciting plans for the future of TimeWise! Here are some features I am considering for upcoming updates:</p>
     <ul>
       <li>Integration with third-party calendar apps</li>
       <li>Enhanced collaboration features for team projects</li>
@@ -130,84 +130,92 @@
   </div>
 
   <!-- Dashboard -->
-  <div id="dashboard">
-    <h2>Dashboard</h2>
-    <div id="dashboard-content">
-  <!-- Daily Tasks -->
-  <div>
-    <h3>Daily Tasks</h3>
-    <input type="text" id="daily-task-input" placeholder="Enter task">
-    <button id="add-daily-task-button">Add Task</button>
-    <ul id="daily-task-list"></ul>
-  </div>
-  
-  <!-- Weekly Tasks -->
-  <div>
-    <h3>Weekly Tasks</h3>
-    <input type="text" id="weekly-task-input" placeholder="Enter task">
-    <button id="add-weekly-task-button">Add Task</button>
-    <ul id="weekly-task-list"></ul>
-  </div>
+<div id="dashboard">
+  <h2>Dashboard</h2>
+  <div id="dashboard-content">
 
-  <!-- Monthly Tasks -->
-  <div>
-    <h3>Monthly Tasks</h3>
-    <input type="text" id="monthly-task-input" placeholder="Enter task">
-    <button id="add-monthly-task-button">Add Task</button>
-    <ul id="monthly-task-list"></ul>
-  </div>
- 
-      <!-- Reminders -->
-      <div>
-        <h3>Reminders</h3>
-        <input type="datetime-local" id="reminder-input">
-        <button id="set-reminder-button">Set Reminder</button>
-        <div id="notifications"></div>
-      </div>
+    <!-- Daily Tasks Section -->
+    <div>
+      <h2>Daily Tasks</h2>
+      <input type="text" id="daily-task-input" placeholder="Enter daily task">
+      <button id="add-daily-task-button">Add Daily Task</button>
+      <ul id="daily-task-list"></ul>
+    </div>
+
+    <!-- Weekly Tasks Section -->
+    <div>
+      <h2>Weekly Tasks</h2>
+      <input type="text" id="weekly-task-input" placeholder="Enter weekly task">
+      <button id="add-weekly-task-button">Add Weekly Task</button>
+      <ul id="weekly-task-list"></ul>
+    </div>
+
+    <!-- Monthly Tasks Section -->
+    <div>
+      <h2>Monthly Tasks</h2>
+      <input type="text" id="monthly-task-input" placeholder="Enter monthly task">
+      <button id="add-monthly-task-button">Add Monthly Task</button>
+      <ul id="monthly-task-list"></ul>
+    </div>
+
+    <!-- Priority Tasks Section -->
+    <div>
+      <h2>Priority Tasks</h2>
+      <input type="text" id="priority-task-input" placeholder="Enter priority task">
+      <select id="priority-level-input">
+        <option value="">Select priority level</option>
+        <option value="High">High</option>
+        <option value="Medium">Medium</option>
+        <option value="Low">Low</option>
+      </select>
+      <button id="add-priority-task-button">Add Priority Task</button>
+      <ul id="priority-task-list"></ul>
+    </div>
+
+    <!-- Organized Tasks Section -->
+    <div>
+      <h2>Organized Tasks</h2>
+      <input type="text" id="organized-task-input" placeholder="Enter organized task">
+      <select id="category-input">
+        <option value="">Select category</option>
+        <option value="Work">Work</option>
+        <option value="Personal">Personal</option>
+        <option value="Other">Other</option>
+      </select>
+      <button id="add-organized-task-button">Add Organized Task</button>
+      <ul id="organized-task-list"></ul>
+    </div>
+
+      <!-- Reminders Section -->
+      <section id="reminders">
+        <h1>Reminders</h1>
+        <form id="add-reminder-form">
+          <label for="reminder-text">Reminder:</label>
+          <input type="text" id="reminder-text" required>
+          <label for="reminder-datetime">Date & Time:</label>
+          <input type="datetime-local" id="reminder-datetime" required>
+          <button type="submit" id="add-reminder-button">Add Reminder</button>
+        </form>
+        <ul id="reminder-list"></ul>
+      </section>
       
-      <!-- Pomodoro Timer -->
-      <div id="pomodoro">
+      <!-- Pomodoro Timer Section -->
+      <section id="pomodoro">
         <h3>Pomodoro Timer</h3>
         <div id="pomodoro-status" class="stopped">Pomodoro Stopped</div>
         <button id="start-pomodoro">Start Pomodoro</button>
         <button id="stop-pomodoro" style="display: none;">Stop Pomodoro</button>
         <div id="timer-display">25:00</div>
-      </div>
+      </section>
       
-      <!-- Time Tracking -->
-      <div id="time-tracking">
+      <!-- Time Tracking Section -->
+      <section id="time-tracking">
         <h3>Time Tracking</h3>
         <div id="time-tracking-status" class="stopped">Time Tracking Stopped</div>
         <button id="start-time-tracking">Start Time Tracking</button>
         <button id="stop-time-tracking" style="display: none;">Stop Time Tracking</button>
         <div id="time-tracking-display">00:00:00</div>
-      </div>
-
-      <!-- Priority Tasks -->
-      <div>
-        <h3>Priority Tasks</h3>
-        <input type="text" id="prioritization-input" placeholder="Enter priority task">
-        <select id="priority-level">
-          <option value="high">High</option>
-          <option value="medium">Medium</option>
-          <option value="low">Low</option>
-        </select>
-        <button id="add-priority-task-button">Add Priority Task</button>
-        <ul id="priority-task-list"></ul>
-      </div>
-      
-      <!-- Organized Tasks -->
-      <div>
-        <h3>Organized Tasks</h3>
-        <input type="text" id="organization-input" placeholder="Enter organized task">
-        <select id="category">
-          <option value="work">Work</option>
-          <option value="personal">Personal</option>
-          <option value="other">Other</option>
-        </select>
-        <button id="add-organized-task-button">Add Organized Task</button>
-        <ul id="organization-task-list"></ul>
-      </div>
+      </section>
     </main>
 
   <footer id="footer">
