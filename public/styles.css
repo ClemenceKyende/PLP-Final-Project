@@ -54,6 +54,7 @@ button {
   padding: 10px 20px;
   cursor: pointer;
   border-radius: 5px;
+  
 }
 
 button:hover {
@@ -63,7 +64,7 @@ button:hover {
 /* Style for the Get Started button */
 .get-started-button {
   display: inline-block;
-  font-size: 1.5em; /* Increase the font size */
+  font-size: 1.0em; /* Increase the font size */
   padding: 15px 30px; /* Increase the padding */
   background-color: #0056b3; /* Blue background */
   color: #fff; /* White text */
