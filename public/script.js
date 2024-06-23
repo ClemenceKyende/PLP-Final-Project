@@ -1210,7 +1210,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function loadReminders(user_id) {
   try {
-    const response = await fetch(`/api/reminders/reminders/${user_id}`);
+    const response = await fetch(`/api/reminders/${user_id}`);
 
     if (!response.ok) {
       throw new Error('Failed to fetch reminders');
@@ -1232,7 +1232,7 @@ async function addReminder(event) {
   const user_id = '6098c5943e39e40015b2a4f7'; 
 
   try {
-    const response = await fetch('/api/reminders/reminder', { 
+    const response = await fetch('/api/reminders', { 
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -1300,7 +1300,7 @@ async function editReminder(id) {
 
   if (newText) {
     try {
-      const response = await fetch(`/api/reminders/reminder/${id}`, {
+      const response = await fetch(`/api/reminders/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
@@ -1329,7 +1329,7 @@ async function editReminder(id) {
 
 async function deleteReminder(id, listItem) {
   try {
-    const response = await fetch(`/api/reminders/reminder/${id}`, {
+    const response = await fetch(`/api/reminders/${id}`, {
       method: 'DELETE'
     });
 
@@ -1388,7 +1388,7 @@ function updatePomodoro() {
 document.getElementById('start-pomodoro').addEventListener('click', startPomodoro);
 document.getElementById('stop-pomodoro').addEventListener('click', stopPomodoro);
 
-
+//Time Tracking function
 let timeTrackingInterval;
 let isTimeTrackingRunning = false;
 let timeTrackingSeconds = 0;
