@@ -9,11 +9,11 @@ Welcome to TimeWise, your ultimate productivity and time management web app! Tim
 
 ## Features
 
-- **Task Management:** Easily create, organize, and prioritize tasks to stay on top of your to-do list.
-- **Reminders and Notifications:** Set reminders for important tasks and deadlines to ensure nothing falls through the cracks.
-- **Time Tracking:** Monitor how you spend your time to identify areas for improvement and increase efficiency.
-- **Pomodoro Timer:** Harness the power of the Pomodoro Technique to enhance focus and productivity during work sessions.
-- **Planners:** Plan and organize your tasks effortlessly with daily, weekly, and monthly planners.
+- **Task Management -** Easily create, organize, and prioritize tasks to stay on top of your to-do list.
+- **Reminders and Notifications -** Set reminders for important tasks and deadlines to ensure nothing falls through the cracks.
+- **Time Tracking -** Monitor how you spend your time to identify areas for improvement and increase efficiency.
+- **Pomodoro Timer -** Harness the power of the Pomodoro Technique to enhance focus and productivity during work sessions.
+- **Planners -** Plan and organize your tasks effortlessly with daily, weekly, and monthly planners.
 
 ## Getting Started
 
