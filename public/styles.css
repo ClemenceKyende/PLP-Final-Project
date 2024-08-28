@@ -3,16 +3,12 @@ body {
   font-family: 'Roboto', sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #f4f4f4;
+  background: linear-gradient(to right, #e6f0ff, #d0e0ff); /* Light blue gradient */
   color: #333;
-  background-image: url('images/TimeWise-background.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
   position: relative;
 }
 
+/* Overlay */
 body::before {
   content: "";
   position: absolute;
@@ -24,12 +20,9 @@ body::before {
   z-index: -1;
 }
 
-/* Page Containers */
-#home-page, #about-page, #dashboard, #signup-form, #login-form, #forgot-password-form {
-  background-color: rgba(240, 240, 240, 0.9);
-  padding: 20px;
-  border-radius: 10px;
-  margin: 20px;
+/* Typography */
+h1, h2, h3 {
+  color: #0056b3;
 }
 
 /* Logo */
@@ -41,41 +34,26 @@ body::before {
   height: auto;
 }
 
-/* Typography */
-h1, h2, h3 {
-  color: #0056b3;
-}
-
 /* Buttons */
-button {
+button, .get-started-button {
   background-color: #0056b3;
   color: #fff;
   border: none;
   padding: 10px 20px;
   cursor: pointer;
   border-radius: 5px;
-  
+  text-decoration: none;
+  transition: background-color 0.3s ease;
 }
 
-button:hover {
+button:hover, .get-started-button:hover {
   background-color: #004494;
 }
 
-/* Style for the Get Started button */
 .get-started-button {
   display: inline-block;
   font-size: 1.0em; /* Increase the font size */
   padding: 15px 30px; /* Increase the padding */
-  background-color: #0056b3; /* Blue background */
-  color: #fff; /* White text */
-  text-align: center;
-  text-decoration: none;
-  border-radius: 5px; /* Rounded corners */
-  transition: background-color 0.3s ease; /* Smooth transition for background color */
-}
-
-.get-started-button:hover {
-  background-color: #004494; /* dark blue on hover */
 }
 
 /* Inputs */
@@ -90,73 +68,124 @@ input[type="text"], input[type="email"], input[type="password"], input[type="dat
 
 /* Navigation Buttons */
 #navigation-buttons {
-  display: none;
+  display: flex;
   justify-content: center;
   margin: 20px 0;
 }
 
-#navigation-buttons button {
-  margin: 0 10px;
-}
-
-/* Authentication Forms */
-#signup-form, #login-form, #forgot-password-form {
-  display: none;
-  max-width: 400px;
-  margin: 50px auto;
-}
-
-#signup-form button, #login-form button, #forgot-password-form button {
-  width: 100%;
-  margin: 5px 0;
-}
-
-.error-message {
-  color: red;
-}
-
-.success-message {
-  color: green;
-}
-
-.password-requirements.invalid {
-  color: red;
-}
-
-.password-requirements.valid {
-  color: green;
-}
-
-/* Home Page */
-#home-page ul {
+#navigation-buttons li {
   list-style: none;
-  padding: 0;
 }
 
-#home-page ul li {
-  background-color: #fff;
-  margin: 5px 0;
-  padding: 10px;
+#navigation-buttons a, #navigation-buttons button {
+  text-decoration: none;
+  color: #333;
+  padding: 10px 20px;
+  margin: 0 10px;
   border-radius: 5px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  transition: background-color 0.3s;
+  cursor: pointer;
 }
 
-#home-page ul li button {
-  margin-left: 10px;
-  padding: 5px 10px;
-  font-size: 0.9em;
+#navigation-buttons a:hover, #navigation-buttons button:hover {
+  background-color: #d0e0ff;
 }
 
-/* About Page */
-#about-page {
-  display: none;
+/* Page Containers */
+#home-page, #about-page, #dashboard, #signup-form, #login-form, #forgot-password-form {
+  background-color: rgba(240, 240, 240, 0.9);
+  padding: 20px;
+  border-radius: 10px;
+  margin: 20px;
 }
 
+/* Section Styles */
+main section {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+#intro {
+  background-color: rgba(240, 240, 240, 0.9);
+  padding: 40px 20px;
+  border-radius: 10px;
+  margin: 20px;
+}
+
+#features {
+  background-color: rgba(240, 240, 240, 0.9);
+  padding: 40px 20px;
+  border-radius: 10px;
+  margin: 20px;
+}
+
+#call-to-action {
+  background-color: rgba(240, 240, 240, 0.9);
+  padding: 40px 20px;
+  border-radius: 10px;
+  margin: 20px;
+}
+
+/* Features */
+.feature {
+  background-color: #fff;
+  margin: 10px 0;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Buttons */
+button, .get-started-button {
+  background-color: #0056b3;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+button:hover, .get-started-button:hover {
+  background-color: #004494;
+}
+
+/* Section Styles */
+#about-page section {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+#intro {
+  background-color: rgba(240, 240, 240, 0.9);
+  padding: 40px 20px;
+  border-radius: 10px;
+  margin: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#features {
+  background-color: rgba(240, 240, 240, 0.9);
+  padding: 40px 20px;
+  border-radius: 10px;
+  margin: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#call-to-action {
+  background-color: rgba(240, 240, 240, 0.9);
+  padding: 40px 20px;
+  border-radius: 10px;
+  margin: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* List Styles */
 #about-page ul {
   list-style-type: none;
   padding: 0;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 #about-page ul li {
@@ -167,15 +196,42 @@ input[type="text"], input[type="email"], input[type="password"], input[type="dat
   display: flex;
   justify-content: space-between;
   align-items: center;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
+/* Links */
 #about-page a {
   color: #0056b3;
+  text-decoration: none;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#about-page a:hover {
+  text-decoration: underline;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Buttons */
+button, .get-started-button {
+  background-color: #0056b3;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+button:hover, .get-started-button:hover {
+  background-color: #004494;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 /* Dashboard */
 #dashboard {
-  display: none;
+  display: block;
   padding: 20px;
   background-color: #f0f0f0;
   border: 1px solid #ccc;
@@ -267,78 +323,60 @@ input[type="text"], input[type="email"], input[type="password"], input[type="dat
   margin: 10px 0;
 }
 
+/* Authentication Forms */
+#signup-form, #login-form, #forgot-password-form {
+  display: block;
+  max-width: 400px;
+  margin: 50px auto;
+}
+
+#signup-form button, #login-form button, #forgot-password-form button {
+  width: 100%;
+  margin: 5px 0;
+}
+
+.error-message {
+  color: red;
+}
+
+.success-message {
+  color: green;
+}
+
+.password-requirements.invalid {
+  color: red;
+}
+
+.password-requirements.valid {
+  color: green;
+}
+
 /* Footer */
 #footer {
-  position: fixed;
-  bottom: 0;
+  position: relative;
   width: 100%;
   background-color: #f8f8f8;
-  padding: 0;
-  box-sizing: border-box;
-  z-index: 999;
-  height: 40px;
-  text-align: center;
+  padding: 10px 20px; /* Add padding for spacing */
+  box-sizing: border-box; /* Include padding in the element's total width */
+  text-align: center; /* Center-align text */
+  border-top: 1px solid #ddd; /* Optional: Add a border for separation */
+  margin-top: 20px; /* Space above the footer */
 }
 
-/* Media Queries */
-@media (max-width: 1200px) {
-  /* Reduce padding and margins for medium-sized screens */
-  #home-page, #about-page, #dashboard, #signup-form, #login-form, #forgot-password-form {
-    padding: 15px;
-    margin: 15px;
-  }
-
-  #dashboard-content {
-    flex-direction: column;
-  }
+#footer p {
+  margin: 0; /* Remove default margin */
+  color: #333; /* Text color */
 }
 
+/* Ensure footer is responsive */
 @media (max-width: 768px) {
-  /* Stack navigation buttons vertically on small screens */
-  #navigation-buttons {
-    flex-direction: column;
-  }
-
-  #navigation-buttons button {
-    margin: 10px 0;
-  }
-
-  #logo img {
-    max-width: 70%;
-  }
-
-  #dashboard-content {
-    flex-direction: column;
-  }
-}
-
-@media (max-width: 480px) {
-  /* Adjust padding and font sizes for very small screens */
-  body {
-    font-size: 14px;
-  }
-
-  button {
-    padding: 8px 16px;
-    font-size: 14px;
-  }
-
-  input[type="text"], input[type="email"], input[type="password"], input[type="datetime-local"] {
-    padding: 8px;
-    font-size: 14px;
-  }
-
-  #dashboard h2 {
-    font-size: 20px;
-  }
-
-  #dashboard-content > div {
+  #footer {
     padding: 10px;
-    min-width: 100%;
   }
 }
 
-/* CSS Styles */
+
+/* Reminders */
 #reminders {
   max-width: 450px; /* Adjust the maximum width as needed */
   margin: 0 auto; /* Center the section horizontally */
@@ -363,4 +401,187 @@ input[type="text"], input[type="email"], input[type="password"], input[type="dat
 
 #add-reminder-button {
   width: 120px; /* Adjust width of buttons */
+}
+
+/* Media Queries */
+@media (max-width: 1200px) {
+  /* Reduce padding and margins for medium-sized screens */
+  #home-page, #about-page, #dashboard, #signup-form, #login-form, #forgot-password-form {
+    padding: 15px;
+    margin: 15px;
+  }
+
+  #dashboard-content > div {
+    min-width: 200px;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Reduce padding and margins for smaller screens */
+  #home-page, #about-page, #dashboard, #signup-form, #login-form, #forgot-password-form {
+    padding: 10px;
+    margin: 10px;
+  }
+
+  #dashboard-content {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  #dashboard-content > div {
+    min-width: 100%;
+  }
+
+  #logo img {
+    width: 100px; /* Smaller logo size for smaller screens */
+  }
+
+  .get-started-button {
+    font-size: 0.9em; /* Reduce font size */
+    padding: 10px 20px; /* Reduce padding */
+  }
+
+  #navigation-buttons a, #navigation-buttons button {
+    padding: 5px 10px;
+  }
+
+  .profile-pic {
+    width: 100px;
+    height: 100px;
+  }
+
+  .progress-circle {
+    width: 75px;
+    height: 75px;
+  }
+
+  .progress-text {
+    font-size: 1em;
+  }
+}
+
+/* Main Content */
+main {
+  padding: 20px;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.profile-container {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  max-width: 800px;
+  margin: 20px auto;
+}
+
+.profile-container h2 {
+  margin-top: 0;
+}
+
+.profile-pic {
+  display: block;
+  margin: 0 auto 20px;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  background-color: rgba(240, 240, 240, 0.9);
+}
+
+.profile-info {
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.profile-info p {
+  margin: 10px 0;
+}
+
+.profile-info button {
+  margin-right: 10px;
+}
+
+/* Hidden Elements */
+.hidden {
+  display: none;
+}
+
+/* Forms */
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.form-group input, .form-group select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+#customization-options {
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
+}
+
+#customization-options h2 {
+  margin-top: 0;
+}
+
+#customization-form button {
+  background-color: #333;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+#customization-form button:hover {
+  background-color: #555;
+}
+
+/* Example CSS Enhancements */
+button:hover {
+  background-color: #0056b3;
+  color: #ffffff;
+}
+
+input, select {
+  padding: 8px;
+  margin: 5px 0;
+}
+
+.dashboard-section {
+  margin-bottom: 20px;
+}
+
+@media (max-width: 600px) {
+  .dashboard-section {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  button, input, select {
+    width: 100%;
+  }
+}
+
+
+/* Error Container */
+#error-container {
+  color: red;
+  font-size: 16px;
+  margin-top: 20px;
 }

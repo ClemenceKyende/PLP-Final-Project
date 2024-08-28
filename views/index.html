@@ -3,227 +3,59 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TimeWise - Your Personal Productivity Companion</title>
+  <title>TimeWise - Boost Your Productivity</title>
   <link rel="stylesheet" type="text/css" href="/styles.css">
-
 </head>
 <body>
-<header>
-   <!-- Logo -->
-   <div id="logo">
-    <img src="/images/TimeWise-logo.jpg" alt="TimeWise Logo" width="200" height="auto">
-  </div>
+  <header>
+    <div id="logo">
+      <img src="/images/TimeWise-logo.jpg" alt="TimeWise Logo" width="200" height="auto">
+    </div>
 
-  <!-- Notification Bar -->
-<div id="notification-bar" style="display: none; background-color: #4CAF50; color: white; padding: 10px;">
-  <span id="notification-message"></span>
-</div>
+    <ul id="navigation-buttons" class="navigation-buttons">
+      <li><a href="/">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="dashboard.html">Dashboard</a></li>
+    <li><a href="profile.html">Profile</a></li>
+    </ul>
+  </header>
 
-<!-- Authentication Forms -->
-<div id="signup-form" class="form-container">
-  <h2>Sign Up</h2>
-  <input type="email" id="signup-email" placeholder="Email">
-  <input type="password" id="signup-password" placeholder="Password">
-  <div id="password-requirements" class="password-requirements"></div>
-  <input type="checkbox" id="show-password-checkbox-signup" class="show-password-checkbox">
-  <label for="show-password-checkbox-signup" class="show-password-label">Show Password</label>
-  <button id="signup-button">Sign Up</button>
-  <button id="login-link">Already have an account? Log In</button>
-  <div id="signup-error" class="error-message"></div>
-  <div id="signup-success" class="success-message"></div>
-</div>
-
-<div id="login-form" class="form-container">
-  <h2>Login</h2>
-  <input type="email" id="email" placeholder="Email">
-  <input type="password" id="password" placeholder="Password">
-  <input type="checkbox" id="show-password-checkbox-login" class="show-password-checkbox">
-  <label for="show-password-checkbox-login" class="show-password-label">Show Password</label>
-  <button id="login-button">Log In</button>
-  <button id="signup-link">Don't have an account? Sign Up</button>
-  <button id="forgot-password-link">Forgot Password?</button>
-  <div id="login-error" class="error-message"></div>
-  <div id="login-success" class="success-message"></div>
-</div>
-
-<div id="forgot-password-form" class="form-container">
-  <h2>Reset Password</h2>
-  <input type="email" id="reset-email" placeholder="Email">
-  <button id="reset-password-button">Reset Password</button>
-  <button class="secondary-button" id="remember-password-link">Remember your password? Log in</button>
-  <div id="reset-error" class="error-message"></div>
-</div>
-
-<div id="navigation-buttons" class="navigation-buttons">
-  <button id="home-button">Home</button>
-  <button id="about-button">About</button>
-  <button id="dashboard-button">Dashboard</button>
-  <button id="logout-button">Log Out</button>
-</div>
-
-
-  <!-- Home Page -->
-  <div id="home">
-    <div id="home-page">
-      <h1>Welcome to TimeWise</h1>
-      <p>Your ultimate productivity and time management web app! TimeWise is designed to help you take control of your time and enhance your productivity levels, whether you're a student, professional, or someone simply looking to manage personal tasks more efficiently.</p>
-      
-      <h2>Key Features</h2>
-      <ul>
-        <li>Task Management - Easily create, organize, and prioritize your tasks to stay on top of your commitments.</li>
-        <li>Reminders and Notifications - Set reminders for important tasks and receive notifications to ensure nothing falls through the cracks.</li>
-        <li>Pomodoro Timer - Boost your focus and productivity with the Pomodoro Technique, a proven method for time management.</li>
-        <li>Daily, Weekly, and Monthly Planners - Plan your days, weeks, and months ahead to optimize your time and achieve your goals.</li>
-        <li>Time Tracking - Monitor how you spend your time to identify patterns, track progress, and make adjustments for better efficiency.</li>
-        <li>Task Prioritization - Assign priority levels to your tasks to tackle the most important ones first and maximize your productivity.</li>
-        <li>Task Organization - Categorize your tasks into projects, tags, or categories for better organization and clarity.</li>
-      </ul>
-      
-      <h2>Recent Updates</h2>
-      <ul>
-        <li>Added new Pomodoro Timer feature for focused work sessions.</li>
-        <li>Improved user interface for better task management and navigation.</li>
-        <li>Enhanced notification system for timely reminders and alerts.</li>
-        <li>Introduced customizable planner templates for personalized scheduling.</li>
-        <li>Integrated seamless syncing across devices for uninterrupted productivity on the go.</li>
-        <li>Implemented advanced analytics for insightful time tracking and performance analysis.</li>
-      </ul>
-      
-      <!-- Call to Action Section -->
-      <div id="call-to-action" class="call-to-action">
-        <p>Ready to boost your productivity?</p>
-        <a href="#" id="get-started-link" class="get-started-button">Click Here to Get Started</a>
-      </div>
-    </header>
-      
-  <!-- About Page -->
   <main>
-  <div id="about-page">
-    <h2>About TimeWise</h2>
-    <h3>Overview</h3>
-    <p>TimeWise is dedicated to helping individuals manage their tasks, track their time, and improve their productivity. My mission is to empower users to achieve their goals efficiently and effectively.</p>
-    <h3>Development Team</h3>
-    <p> Currently TimeWise is a Solo Endeavor with Future Expansion.I am seeking individuals with technical skills, marketing experience, and industry knowledge.</p>
-    <h3>Contact Information</h3>
-    <p>If you have any questions, feedback, or need support, please reach out to me at:</p>
-    <ul>
-      <li>Email: app.timewise@gmail.com</li>
-      <li>Phone: +254 711870479</li>
-      <li>Address: 00100, Nairobi</li>
-    </ul>
-    <h3>FAQs</h3>
-    <p><strong>Q:</strong> How do I sign up for TimeWise?<br><strong>A:</strong> Click on the Sign Up button on the login page and fill in your details.</p>
-    <p><strong>Q:</strong> How can I reset my password?<br><strong>A:</strong> Click on the Forgot Password link on the login page and follow the instructions.</p>
-    <p><strong>Q:</strong> Is TimeWise free to use?<br><strong>A:</strong> Yes, TimeWise  currently operates on a Freemium revenue model, offering a free tier with basic features to all users. The app's priority at this stage is to attract users and build a strong community before considering premium features or subscription plans.</p>
-    <h3>Acknowledgments</h3>
-    <p>I would like to thank my users and the open-source community for their valuable contributions and support.</p>
-    <h3>License</h3>
-    <p>TimeWise is licensed under the MIT License. You can view the full license <a href="https://opensource.org/licenses/MIT" target="_blank">here</a>.</p>
-    <h3>Roadmap</h3>
-    <p>I have exciting plans for the future of TimeWise! Here are some features I am considering for upcoming updates:</p>
-    <ul>
-      <li>Integration with third-party calendar apps</li>
-      <li>Enhanced collaboration features for team projects</li>
-      <li>Gamification elements to encourage productivity</li>
-    </ul>
-    <p>Stay tuned for more updates!</p>
-  </div>
+    <section id="intro">
+      <h1>Welcome to TimeWise</h1>
+      <p>Your ultimate productivity and time management app. Designed for students, professionals, and anyone looking to enhance personal efficiency.</p>
+    </section>
 
-  <!-- Dashboard -->
-<div id="dashboard">
-  <h2>Dashboard</h2>
-  <div id="dashboard-content">
-
-    <!-- Daily Tasks Section -->
-    <div>
-      <h2>Daily Tasks</h2>
-      <input type="text" id="daily-task-input" placeholder="Enter daily task">
-      <button id="add-daily-task-button">Add Daily Task</button>
-      <ul id="daily-task-list"></ul>
-    </div>
-
-    <!-- Weekly Tasks Section -->
-    <div>
-      <h2>Weekly Tasks</h2>
-      <input type="text" id="weekly-task-input" placeholder="Enter weekly task">
-      <button id="add-weekly-task-button">Add Weekly Task</button>
-      <ul id="weekly-task-list"></ul>
-    </div>
-
-    <!-- Monthly Tasks Section -->
-    <div>
-      <h2>Monthly Tasks</h2>
-      <input type="text" id="monthly-task-input" placeholder="Enter monthly task">
-      <button id="add-monthly-task-button">Add Monthly Task</button>
-      <ul id="monthly-task-list"></ul>
-    </div>
-
-    <!-- Priority Tasks Section -->
-    <div>
-      <h2>Priority Tasks</h2>
-      <input type="text" id="priority-task-input" placeholder="Enter priority task">
-      <select id="priority-level-input">
-        <option value="">Select priority level</option>
-        <option value="High">High</option>
-        <option value="Medium">Medium</option>
-        <option value="Low">Low</option>
-      </select>
-      <button id="add-priority-task-button">Add Priority Task</button>
-      <ul id="priority-task-list"></ul>
-    </div>
-
-    <!-- Organized Tasks Section -->
-    <div>
-      <h2>Organized Tasks</h2>
-      <input type="text" id="organized-task-input" placeholder="Enter organized task">
-      <select id="category-input">
-        <option value="">Select category</option>
-        <option value="Work">Work</option>
-        <option value="Personal">Personal</option>
-        <option value="Other">Other</option>
-      </select>
-      <button id="add-organized-task-button">Add Organized Task</button>
-      <ul id="organized-task-list"></ul>
-    </div>
-
-      <!-- Reminders Section -->
-      <section id="reminders">
-        <h1>Reminders</h1>
-        <form id="add-reminder-form">
-          <label for="reminder-text">Reminder:</label>
-          <input type="text" id="reminder-text" required>
-          <label for="reminder-datetime">Date & Time:</label>
-          <input type="datetime-local" id="reminder-datetime" required>
-          <button type="submit" id="add-reminder-button">Add Reminder</button>
-        </form>
-        <ul id="reminder-list"></ul>
-      </section>
-      
-      <!-- Pomodoro Timer Section -->
-      <section id="pomodoro">
+    <section id="features">
+      <h2>Key Features</h2>
+      <div class="feature">
+        <h3>Task Management</h3>
+        <p>Organize, prioritize, and manage your tasks effectively.</p>
+      </div>
+      <div class="feature">
+        <h3>Reminders & Notifications</h3>
+        <p>Set reminders and get notifications to stay on track.</p>
+      </div>
+      <div class="feature">
         <h3>Pomodoro Timer</h3>
-        <div id="pomodoro-status" class="stopped">Pomodoro Stopped</div>
-        <button id="start-pomodoro">Start Pomodoro</button>
-        <button id="stop-pomodoro" style="display: none;">Stop Pomodoro</button>
-        <div id="timer-display">25:00</div>
-      </section>
-      
-      <!-- Time Tracking Section -->
-      <section id="time-tracking">
-        <h3>Time Tracking</h3>
-        <div id="time-tracking-status" class="stopped">Time Tracking Stopped</div>
-        <button id="start-time-tracking">Start Time Tracking</button>
-        <button id="stop-time-tracking" style="display: none;">Stop Time Tracking</button>
-        <div id="time-tracking-display">00:00:00</div>
-      </section>
-    </main>
+        <p>Boost your productivity with our Pomodoro Timer.</p>
+      </div>
+      <div class="feature">
+        <h3>Planners & Time Tracking</h3>
+        <p>Plan your schedule and track your time efficiently.</p>
+      </div>
+    </section>
+
+    <section id="call-to-action">
+      <h2>Ready to Boost Your Productivity?</h2>
+      <a href="signup.html" class="get-started-button"> Click Here to Get Started</a>
+    </section>
+  </main>
 
   <footer id="footer">
-    <div>
-      <p>&copy; 2024 TimeWise. All rights reserved.</p>
-    </div>
-  </footer>
-  
+    <p>&copy; 2024 TimeWise. All rights reserved.</p>
+  </footer> 
+
   <script src="/script.js"></script>
 </body>
 </html>

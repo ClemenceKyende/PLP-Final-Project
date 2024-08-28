@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TimeWise - Dashboard</title>
+  <link rel="stylesheet" type="text/css" href="/styles.css">
+  <script defer src="/script.js"></script>
+</head>
+<body>
+  <header>
+    <div id="logo">
+      <img src="/images/TimeWise-logo.jpg" alt="TimeWise Logo" width="200" height="auto">
+    </div>
+    <ul id="navigation-buttons" class="navigation-buttons">
+      <li><a href="/">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="profile.html">Profile</a></li>
+      <li><button id="logout-button" title="Log Out">Log Out</button></li>
+    </ul>
+  </header>
+
+  <main>
+    <section id="dashboard">
+      <h2>Your Dashboard</h2>
+      <div id="dashboard-content">
+        <!-- Task Management -->
+        <div class="dashboard-section">
+          <h3>Daily Tasks</h3>
+          <input type="text" id="daily-task-input" placeholder="Enter daily task" title="Enter a task for today">
+          <button id="add-daily-task-button" title="Add Daily Task">Add Daily Task</button>
+          <ul id="daily-task-list"></ul>
+        </div>
+
+        <div class="dashboard-section">
+          <h3>Weekly Tasks</h3>
+          <input type="text" id="weekly-task-input" placeholder="Enter weekly task" title="Enter a task for this week">
+          <button id="add-weekly-task-button" title="Add Weekly Task">Add Weekly Task</button>
+          <ul id="weekly-task-list"></ul>
+        </div>
+
+        <div class="dashboard-section">
+          <h3>Monthly Tasks</h3>
+          <input type="text" id="monthly-task-input" placeholder="Enter monthly task" title="Enter a task for this month">
+          <button id="add-monthly-task-button" title="Add Monthly Task">Add Monthly Task</button>
+          <ul id="monthly-task-list"></ul>
+        </div>
+
+        <div class="dashboard-section">
+          <h3>Priority Tasks</h3>
+          <input type="text" id="priority-task-input" placeholder="Enter priority task" title="Enter a priority task">
+          <select id="priority-level-input" title="Select priority level">
+            <option value="">Priority Level</option>
+            <option value="High">High</option>
+            <option value="Medium">Medium</option>
+            <option value="Low">Low</option>
+          </select>
+          <button id="add-priority-task-button" title="Add Priority Task">Add Priority Task</button>
+          <ul id="priority-task-list"></ul>
+        </div>
+
+        <div class="dashboard-section">
+          <h3>Organized Tasks</h3>
+          <input type="text" id="organized-task-input" placeholder="Enter organized task" title="Enter an organized task">
+          <select id="category-input" title="Select category">
+            <option value="">Category</option>
+            <option value="Work">Work</option>
+            <option value="Personal">Personal</option>
+            <option value="Other">Other</option>
+          </select>
+          <button id="add-organized-task-button" title="Add Organized Task">Add Organized Task</button>
+          <ul id="organized-task-list"></ul>
+        </div>
+
+        <!-- Reminder Management -->
+        <div class="dashboard-section">
+          <h3>Reminders</h3>
+          <form id="add-reminder-form">
+            <label for="reminder-text">Reminder:</label>
+            <input type="text" id="reminder-text" required title="Enter reminder text">
+            <label for="reminder-datetime">Date & Time:</label>
+            <input type="datetime-local" id="reminder-datetime" required title="Enter date and time">
+            <button type="submit" id="add-reminder-button" title="Add Reminder">Add Reminder</button>
+          </form>
+          <ul id="reminder-list"></ul>
+        </div>
+
+        <!-- Pomodoro Timer -->
+        <div class="dashboard-section">
+          <h3>Pomodoro Timer</h3>
+          <div id="pomodoro-status">Pomodoro Stopped</div>
+          <input type="number" id="pomodoro-duration" min="1" max="60" value="25" title="Pomodoro Duration (minutes)">
+          <button id="start-pomodoro" title="Start Pomodoro">Start</button>
+          <button id="stop-pomodoro" style="display: none;" title="Stop Pomodoro">Stop</button>
+          <button id="reset-pomodoro" title="Reset Pomodoro">Reset</button>
+          <div id="timer-display">25:00</div>
+        </div>
+
+        <!-- Time Tracking -->
+        <div class="dashboard-section">
+          <h3>Time Tracking</h3>
+          <div id="time-tracking-status">Time Tracking Stopped</div>
+          <button id="start-time-tracking" title="Start Time Tracking">Start</button>
+          <button id="stop-time-tracking" style="display: none;" title="Stop Time Tracking">Stop</button>
+          <button id="reset-time-tracking" title="Reset Time Tracking">Reset</button>
+          <div id="time-tracking-display">00:00:00</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer id="footer">
+    <p>&copy; 2024 TimeWise. All rights reserved.</p>
+  </footer>
+</body>
+</html>

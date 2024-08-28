@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TimeWise - Profile</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <header>
+        <div id="logo">
+            <img src="/images/TimeWise-logo.jpg" alt="TimeWise Logo" width="200" height="auto">
+        </div>
+        <ul id="navigation-buttons" class="navigation-buttons">
+            <li><a href="/">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="dashboard.html" class="active">Dashboard</a></li>
+            <li><button id="logout-button">Log Out</button></li>
+        </ul>
+    </header>
+    <main>
+        <!-- Profile information and customization section -->
+        <section class="profile-container">
+            <h2>Profile Information</h2>
+            <img src="" id="profilePic" alt="Profile Picture" class="profile-pic">
+            <div class="profile-info">
+                <p>Username: <span id="username-display"></span></p>
+                <p>Email: <span id="email-display"></span></p>
+                <button id="edit-profile-button">Edit Profile</button>
+                <button id="change-picture-button">Change Profile Picture</button>
+            </div>
+            <!-- Hidden forms for editing profile and changing picture -->
+            <div id="edit-profile-form" class="hidden">
+                <h3>Edit Profile</h3>
+                <form id="editProfileForm">
+                    <div class="form-group">
+                        <label for="newUsername">New Username:</label>
+                        <input type="text" id="newUsername" name="newUsername">
+                    </div>
+                    <div class="form-group">
+                        <label for="newEmail">New Email:</label>
+                        <input type="email" id="newEmail" name="newEmail">
+                    </div>
+                    <button type="submit" id="save-profile-changes">Save Changes</button>
+                </form>
+            </div>
+            <div id="change-pic-form" class="hidden">
+                <h3>Change Profile Picture</h3>
+                <form id="changePicForm" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="profilePicInput">Select Profile Picture:</label>
+                        <input type="file" id="profilePicInput" name="profilePicInput">
+                    </div>
+                    <button type="submit" id="upload-profile-pic">Upload</button>
+                </form>
+            </div>
+
+            <!-- Customization options section -->
+            <section id="customization-options">
+                <h2>Customize Your Profile</h2>
+                <form id="customization-form">
+                    <div class="form-group">
+                        <label for="theme-select">Select Theme:</label>
+                        <select id="theme-select" name="theme">
+                            <option value="light">Light</option>
+                            <option value="dark">Dark</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="layout-select">Select Layout:</label>
+                        <select id="layout-select" name="layout">
+                            <option value="default">Default</option>
+                            <option value="compact">Compact</option>
+                        </select>
+                    </div>
+                    <button type="submit">Apply Customizations</button>
+                </form>
+            </section>
+        </section>
+
+        <!-- Error container -->
+        <div id="error-container" class="hidden"></div>
+    </main>
+
+    <!-- Footer -->
+    <footer id="footer">
+        <p>&copy; 2024 TimeWise. All rights reserved.</p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="/script.js"></script>
+</body>
+</html>

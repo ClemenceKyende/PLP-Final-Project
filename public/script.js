@@ -1,1430 +1,745 @@
+document.addEventListener('DOMContentLoaded', () => {
+  // Handle navigation button clicks
+  const homeButton = document.getElementById('home-button');
+  const aboutButton = document.getElementById('about-button');
+  const dashboardButton = document.getElementById('dashboard-button');
+  const logoutButton = document.getElementById('logout-button');
+  const getStartedLink = document.getElementById('get-started-link');
+  const loginForm = document.getElementById('login-form');
+  const signupForm = document.getElementById('signup-form');
+  const resetPasswordForm = document.getElementById('resetpassword-form');
+  const editProfileButton = document.getElementById('edit-profile-button');
+  const changePicButton = document.getElementById('change-picture-button');
+  const editProfileForm = document.getElementById('edit-profile-form');
+  const changePicForm = document.getElementById('change-pic-form');
 
-function showSignupForm() {
-  document.getElementById('signup-form').style.display = 'block';
-  document.getElementById('login-form').style.display = 'none';
-  document.getElementById('forgot-password-form').style.display = 'none';
-  document.getElementById('home').style.display = 'none';
-}
-
-function showLoginForm() {
-  document.getElementById('login-form').style.display = 'block';
-  document.getElementById('signup-form').style.display = 'none';
-  document.getElementById('forgot-password-form').style.display = 'none';
-  document.getElementById('home').style.display = 'none';
-}
-
-function showforgotPasswordForm() {
-  document.getElementById('forgot-password-form').style.display = 'block';
-  document.getElementById('login-form').style.display = 'none';
-  document.getElementById('signup-form').style.display = 'none';
-  document.getElementById('home').style.display = 'none';
-}
-
-function showSection(sectionId) {
-  document.getElementById('home').style.display = 'none';
-  document.getElementById('about-page').style.display = 'none';
-  document.getElementById('dashboard').style.display = 'none';
-  document.getElementById(sectionId).style.display = 'block';
-}
-
-  document.addEventListener('DOMContentLoaded', function() {
-    // Get reference to the get started link
-    const getStartedLink = document.getElementById('get-started-link');
-
-    // Add event listener to the get started link
-    getStartedLink.addEventListener('click', showSignupForm);
-
-    // Other JavaScript code here...
-  });
-
-// Get references to the navigation buttons
-const homeButton = document.getElementById('home-button');
-const aboutButton = document.getElementById('about-button');
-const dashboardButton = document.getElementById('dashboard-button');
-const logoutButton = document.getElementById('logout-button');
-
-// Attach event listeners
-homeButton.addEventListener('click', () => showSection('home'));
-aboutButton.addEventListener('click', () => showSection('about-page'));
-dashboardButton.addEventListener('click', () => showSection('dashboard'));
-logoutButton.addEventListener('click', logout);
-
-
-function showNotification(message) {
-  var notificationBar = document.getElementById('notification-bar');
-  var notificationMessage = document.getElementById('notification-message');
-  
-  notificationMessage.innerText = message;
-  notificationBar.style.display = 'block';
-
-  // Hide the notification after a certain duration (e.g., 5 seconds)
-  setTimeout(function() {
-    notificationBar.style.display = 'none';
-  }, 5000); // 5000 milliseconds = 5 seconds
-}
-
-// Function to handle signup form submission
-async function signup() {
-  const email = document.getElementById('signup-email').value;
-  const password = document.getElementById('signup-password').value;
-
-  if (!email || !password) {
-    document.getElementById('signup-error').innerText = 'Please enter both email and password';
-    document.getElementById('signup-error').style.display = 'block';
-    return; // Exit function early if fields are empty
-  }
-
-  try {
-    const response = await fetch('/api/auth/signup', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ email, password })
+  // Navigation buttons
+  if (homeButton) {
+    homeButton.addEventListener('click', () => {
+      window.location.href = '/index.html';
     });
-
-    const data = await response.json();
-    if (response.ok) {
-      showNotification('Sign up successful!');
-      document.getElementById('signup-form').style.display = 'none';
-      document.getElementById('navigation-buttons').style.display = 'block';
-      showSection('dashboard');
-    } else {
-      if (response.status === 400) {
-        document.getElementById('signup-error').innerText = 'User already exists. Please login instead';
-      } else {
-        document.getElementById('signup-error').innerText = data.message || 'Server error';
-      }
-      document.getElementById('signup-error').style.display = 'block';
-    }
-  } catch (error) {
-    console.error('Error:', error);
-    document.getElementById('signup-error').innerText = 'Server error';
-    document.getElementById('signup-error').style.display = 'block';
-  }
-}
-
-// Get reference to the buttons
-const signupButton = document.getElementById('signup-button');
-const loginLink = document.getElementById('login-link');
-
-// Attach event listeners
-signupButton.addEventListener('click', signup);
-loginLink.addEventListener('click', showLoginForm);
-
-// Function to display password requirements
-function displayPasswordRequirements() {
-  const passwordRequirements = "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one of the following special characters: @$!%*?&";
-  document.getElementById('password-requirements').textContent = passwordRequirements;
-}
-
-// Function to validate password
-function validatePassword() {
-  const password = document.getElementById('signup-password').value;
-  const passwordRequirementsRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-  const requirementsElement = document.getElementById('password-requirements');
-  
-  if (passwordRequirementsRegex.test(password)) {
-    requirementsElement.textContent = "✓ Password meets requirements.";
-    requirementsElement.classList.remove('invalid');
-    requirementsElement.classList.add('valid');
-  } else {
-    requirementsElement.textContent = "✗ Password does not meet requirements.";
-    requirementsElement.classList.remove('valid');
-    requirementsElement.classList.add('invalid');
-  }
-}
-
-// Add event listener to the password input field to display password requirements when focused
-document.getElementById('signup-password').addEventListener('focus', displayPasswordRequirements);
-
-// Add event listener to the password input field to validate password
-document.getElementById('signup-password').addEventListener('input', validatePassword);
-
-// Function to toggle password visibility for signup form
-function togglePasswordVisibilitySignup() {
-  const passwordInput = document.getElementById('signup-password');
-  if (passwordInput.type === 'password') {
-    passwordInput.type = 'text';
-  } else {
-    passwordInput.type = 'password';
-  }
-}
-
-// Add event listener to the show password checkbox in signup form
-document.getElementById('show-password-checkbox-signup').addEventListener('change', togglePasswordVisibilitySignup);
-
-  // Function to handle login form submission
-async function login() {
-  const email = document.getElementById('email').value;
-  const password = document.getElementById('password').value;
-
-  if (!email || !password) {
-    document.getElementById('login-error').innerText = 'Please enter both email and password';
-    document.getElementById('login-error').style.display = 'block';
-    return; // Exit function early if fields are empty
   }
 
-  try {
-    const response = await fetch('/api/auth/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ email, password })
+  if (aboutButton) {
+    aboutButton.addEventListener('click', () => {
+      window.location.href = '/about.html';
     });
-
-    const data = await response.json();
-    if (response.ok) {
-      showNotification('Login successful!');
-      document.getElementById('login-form').style.display = 'none';
-      document.getElementById('navigation-buttons').style.display = 'block';
-      showSection('dashboard');
-    } else {
-      if (response.status === 401) {
-        document.getElementById('login-error').innerText = 'Incorrect email or password';
-      } else {
-        document.getElementById('login-error').innerText = data.msg || 'Incorrect password';
-      }
-      document.getElementById('login-error').style.display = 'block';
-    }
-  } catch (error) {
-    console.error('Error:', error);
-    document.getElementById('login-error').innerText = 'Incorrect password';
-    document.getElementById('login-error').style.display = 'block';
-  }
-}
-
-// Get reference to the login button, sign up link, and forgot password link
-const loginButton = document.getElementById('login-button');
-const signUpLink = document.getElementById('signup-link');
-const forgotPasswordLink = document.getElementById('forgot-password-link');
-
-// Attach event listeners
-loginButton.addEventListener('click', login);
-signUpLink.addEventListener('click', showSignupForm);
-forgotPasswordLink.addEventListener('click', showforgotPasswordForm); // Use forgotPasswordLink here
-
-// Function to toggle password visibility for login form
-function togglePasswordVisibilityLogin() {
-  const passwordInput = document.getElementById('password');
-  if (passwordInput.type === 'password') {
-    passwordInput.type = 'text';
-  } else {
-    passwordInput.type = 'password';
-  }
-}
-
-// Add event listener to the show password checkbox in login form
-document.getElementById('show-password-checkbox-login').addEventListener('change', togglePasswordVisibilityLogin);
-
-document.addEventListener('DOMContentLoaded', function() {
-  // Define forgotPasswordForm in a broader scope
-  const forgotPasswordForm = document.getElementById('forgot-password-form');
-
-  // Function to switch to the login form
-  function goToLogin() {
-      if (forgotPasswordForm) {
-          forgotPasswordForm.style.display = 'none';
-      }
-      document.getElementById('login-form').style.display = 'block'; // Show the login form
   }
 
-  // Get reference to the remember password link
-  const rememberPasswordLink = document.getElementById('remember-password-link');
+  if (dashboardButton) {
+    dashboardButton.addEventListener('click', () => {
+      window.location.href = '/dashboard.html';
+    });
+  }
 
-  // Attach event listener for remember password link click
-  rememberPasswordLink.addEventListener('click', goToLogin);
+  if (logoutButton) {
+    logoutButton.addEventListener('click', () => {
+      console.log('User logged out');
+      localStorage.removeItem('token'); // Clear token
+      window.location.href = '/login.html'; // Redirect to login
+    });
+  }
 
-  // Define the resetPassword function
-  async function resetPassword() {
-      const email = document.getElementById('reset-email').value;
-      
+  // Get Started link
+  if (getStartedLink) {
+    getStartedLink.addEventListener('click', async (event) => {
+      event.preventDefault();
+
       try {
-          const response = await fetch('/api/auth/reset-password', {
+        const isLoggedIn = await checkAuthStatus();
+        if (isLoggedIn) {
+          window.location.href = '/profile.html'; // Redirect to the dashboard or appropriate page
+        } else {
+          window.location.href = '/signup.html'; // Redirect to sign-up page
+        }
+      } catch (error) {
+        console.error('Error checking authentication status:', error);
+        showError('Error checking authentication status.');
+      }
+    });
+  }
+
+
+// Function to check if the user is authenticated
+const checkAuthStatus = async () => {
+  try {
+    const response = await fetch('/api/users/profile', {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      }
+    });
+
+    if (response.status === 401) {
+      return false; // Unauthorized
+    }
+
+    return response.ok; // Return true if response is OK
+  } catch (error) {
+    console.error('Error fetching authentication status:', error);
+    return false; // Error or no response
+  }
+};
+
+// Function to handle navigation visibility
+const handleNavigationVisibility = async () => {
+  const isAuthenticated = await checkAuthStatus();
+
+  if (isAuthenticated) {
+    document.getElementById('navigation-buttons').style.display = 'flex';
+    document.getElementById('logout-button').classList.remove('hidden');
+  } else {
+    document.getElementById('navigation-buttons').style.display = 'none';
+    document.getElementById('logout-button').classList.add('hidden');
+  }
+};
+
+// Call the function on page load
+window.onload = handleNavigationVisibility;
+
+
+  // Function to handle user registration
+if (signupForm) {
+  signupForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const username = document.getElementById('username').value;
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+
+      if (!username || !email || !password) {
+          showError('Please fill in all fields.');
+          return;
+      }
+
+      try {
+          const response = await fetch('/api/auth/signup', {
               method: 'POST',
-              headers: {
-                  'Content-Type': 'application/json'
-              },
-              body: JSON.stringify({ email })
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ username, email, password })
           });
 
           const data = await response.json();
+
           if (response.ok) {
-              showNotification('Password reset instructions sent to your email!', 'success');
-              document.getElementById('forgot-password-form').style.display = 'none';
-              document.getElementById('reset-password-form').style.display = 'block'; // Show the reset password form
-              document.getElementById('reset-error').style.display = 'none'; // Hide error message
+              localStorage.setItem('token', data.token);
+              window.location.href = 'profile.html';
           } else {
-              if (response.status === 404) {
-                  document.getElementById('reset-error').innerText = 'Email not found';
-              } else {
-                  document.getElementById('reset-error').innerText = data.message || 'Failed to reset password';
-              }
-              document.getElementById('reset-error').style.display = 'block';
+              showError(data.error || 'Registration failed.');
           }
       } catch (error) {
-          console.error('Error:', error);
-          document.getElementById('reset-error').innerText = 'Failed to reset password';
-          document.getElementById('reset-error').style.display = 'block';
+          showError('An error occurred during registration.');
       }
-  }
-
-  // Get reference to the reset password button
-  const resetPasswordButton = document.getElementById('reset-password-button');
-
-  // Attach event listener for reset password button click
-  resetPasswordButton.addEventListener('click', resetPassword);
-});
-
-//Logout functions
-async function logout() {
-  localStorage.removeItem('token');
-  document.getElementById('navigation-buttons').style.display = 'none';
-  // Hide all forms
-  document.getElementById('login-form').style.display = 'none';
-  document.getElementById('signup-form').style.display = 'none';
-  document.getElementById('forgot-password-form').style.display = 'none';
-  // Show the home section
-  showSection('home'); // Pass the ID of the home section as a string
+  });
 }
 
-//Daily functions
-async function addDailyTask() {
-  const text = document.getElementById('daily-task-input').value;
+// Function to handle user login
+if (loginForm) {
+  loginForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
 
-  if (text) {
+      if (!email || !password) {
+          showError('Please fill in all fields.');
+          return;
+      }
+
+      try {
+          const response = await fetch('/api/auth/login', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ email, password })
+          });
+
+          const data = await response.json();
+
+          if (response.ok) {
+              localStorage.setItem('token', data.token);
+              window.location.href = 'profile.html';
+          } else {
+              showError(data.error || 'Login failed.');
+          }
+      } catch (error) {
+          showError('An error occurred during login.');
+      }
+  });
+}
+
+  // Handle reset password form submission
+  if (resetPasswordForm) {
+    resetPasswordForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const email = document.getElementById('reset-email').value;
+
+      try {
+        const response = await fetch('/api/auth/send-reset-password-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email })
+        });
+
+        if (response.ok) {
+          console.log('Password reset email sent');
+        } else {
+          console.error('Password reset failed');
+          showError('Password reset failed.');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        showError('An error occurred while sending the reset password email.');
+      }
+    });
+  }
+
+  // Profile editing
+  if (editProfileButton) {
+    editProfileButton.addEventListener('click', toggleEditProfile);
+  }
+
+  if (changePicButton) {
+    changePicButton.addEventListener('click', toggleChangePicture);
+  }
+
+  if (editProfileForm) {
+    editProfileForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      await updateProfile();
+    });
+  }
+
+  if (changePicForm) {
+    changePicForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      await updateProfilePic();
+    });
+  }
+
+  function toggleEditProfile() {
+    if (editProfileForm) {
+      editProfileForm.classList.toggle('hidden');
+    } else {
+      console.error('Edit profile form not found.');
+    }
+  }
+
+  function toggleChangePicture() {
+    if (changePicForm) {
+      changePicForm.classList.toggle('hidden');
+    } else {
+      console.error('Change profile picture form not found.');
+    }
+  }
+
+  const updateProfilePic = async () => {
+    if (!changePicForm) {
+      console.error('Change profile picture form not found.');
+      return;
+    }
+    const formData = new FormData(changePicForm);
+
     try {
-      const response = await fetch('/api/daily', {
+      const response = await fetch('/api/users/updateProfilePic', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ text })
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
+        body: formData
       });
 
-      if (response.ok) {
-        const newTask = await response.json();
-        console.log('New daily task created:', newTask);
-
-        // Create task item
-        const taskItem = document.createElement('li');
-        taskItem.id = `daily-task-${newTask._id}`;
-
-        // Checkbox for completion
-        const checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-        checkbox.addEventListener('change', () => toggleTaskCompletion(newTask._id, checkbox.checked, taskItem));
-
-        // Label for the task text
-        const label = document.createElement('label');
-        label.textContent = newTask.text;
-        label.style.marginLeft = '10px';
-
-        // Append checkbox and label to task item
-        taskItem.appendChild(checkbox);
-        taskItem.appendChild(label);
-
-        // Add Edit and Delete buttons
-        const editButton = document.createElement('button');
-        editButton.textContent = 'Edit';
-        editButton.onclick = () => editDailyTask(newTask._id, taskItem);
-
-        const deleteButton = document.createElement('button');
-        deleteButton.textContent = 'Delete';
-        deleteButton.onclick = () => deleteDailyTask(newTask._id, taskItem);
-
-        taskItem.appendChild(editButton);
-        taskItem.appendChild(deleteButton);
-
-        // Append task item to the daily task list
-        const dailyTaskList = document.getElementById('daily-task-list');
-        dailyTaskList.appendChild(taskItem);
-
-        // Clear the input field
-        document.getElementById('daily-task-input').value = '';
-      } else {
-        const errorText = await response.text();
-        console.error('Failed to add daily task:', response.statusText, errorText);
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Error response:', errorData);
+        showError(errorData.error || 'Failed to update profile picture.');
+        return;
       }
+
+      const data = await response.json();
+      console.log('Updated profile data:', data);
+
+      document.getElementById('profilePic').src = data.profilePic || 'default-profile-pic.jpg';
     } catch (error) {
-      console.error('Error adding daily task:', error);
+      console.error('Upload error:', error);
+      showError('An error occurred while updating profile picture.');
     }
-  } else {
-    alert('Please enter a task.');
-  }
-}
+  };
 
-async function toggleTaskCompletion(id, completed, taskItem) {
-  try {
-    const response = await fetch(`/api/daily/${id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ completed })
-    });
-
-    if (response.ok) {
-      if (completed) {
-        taskItem.style.textDecoration = 'line-through';
-      } else {
-        taskItem.style.textDecoration = 'none';
-      }
-    } else {
-      console.error('Failed to update task completion:', await response.text());
+  const updateProfile = async () => {
+    if (!editProfileForm) {
+      console.error('Edit profile form not found.');
+      return;
     }
-  } catch (error) {
-    console.error('Error updating task completion:', error);
-  }
-}
 
-async function editDailyTask(id, taskItem) {
-  const newText = prompt('Enter new task text:', taskItem.textContent);
+    const newUsername = editProfileForm.newUsername.value;
+    const newEmail = editProfileForm.newEmail.value;
 
-  if (newText) {
     try {
-      const response = await fetch(`/api/daily/${id}`, {
+      const response = await fetch('/api/users/update', {
         method: 'PUT',
         headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ text: newText })
+        body: JSON.stringify({ username: newUsername, email: newEmail })
       });
 
-      if (response.ok) {
-        const updatedTask = await response.json();
-        
-        // Clear existing content in the taskItem
-        taskItem.innerHTML = '';
-
-        // Checkbox for completion
-        const checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-        checkbox.addEventListener('change', () => toggleTaskCompletion(updatedTask._id, checkbox.checked, taskItem));
-
-        // Label for the task text
-        const label = document.createElement('label');
-        label.textContent = updatedTask.text;
-        label.style.marginLeft = '10px';
-
-        // Append checkbox and label to task item
-        taskItem.appendChild(checkbox);
-        taskItem.appendChild(label);
-
-        // Add Edit and Delete buttons
-        const editButton = document.createElement('button');
-        editButton.textContent = 'Edit';
-        editButton.onclick = () => editDailyTask(updatedTask._id, taskItem);
-
-        const deleteButton = document.createElement('button');
-        deleteButton.textContent = 'Delete';
-        deleteButton.onclick = () => deleteDailyTask(updatedTask._id, taskItem);
-
-        taskItem.appendChild(editButton);
-        taskItem.appendChild(deleteButton);
-      } else {
-        console.error('Failed to update daily task:', await response.text());
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Error response:', errorData);
+        showError(errorData.error || 'Failed to update profile.');
+        return;
       }
+
+      const data = await response.json();
+      console.log('Updated profile data:', data);
+
+      await loadProfile(); // Refresh profile data after updating
     } catch (error) {
-      console.error('Error updating daily task:', error);
+      console.error('Update error:', error);
+      showError('An error occurred while updating profile.');
     }
-  } else {
-    alert('Please enter a new task text.');
-  }
-}
+  };
 
-async function deleteDailyTask(id, taskItem) {
-  try {
-    const response = await fetch(`/api/daily/${id}`, {
-      method: 'DELETE'
-    });
+  const loadProfile = async () => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      showError('No token found. Please log in again.');
+      return;
+    }
 
-    if (response.ok) {
-      taskItem.remove();
+    try {
+      const response = await fetch('/api/users/profile', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (response.status === 401) {
+        showError('Not authorized, token failed or expired. Please log in again.');
+        localStorage.removeItem('token'); // Remove invalid token
+        window.location.href = '/login.html'; // Redirect to login page
+        return;
+      }
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        showError(errorData.error || 'Failed to load profile.');
+        return;
+      }
+
+      const profileData = await response.json();
+      console.log('Loaded profile data:', profileData);
+
+      document.getElementById('username-display').textContent = profileData.username;
+      document.getElementById('email-display').textContent = profileData.email;
+    } catch (error) {
+      console.error('Error fetching profile:', error);
+      showError('An error occurred while loading profile data.');
+    }
+  };
+
+  const showError = (message) => {
+    const errorContainer = document.getElementById('error-container');
+    if (errorContainer) {
+      errorContainer.textContent = message;
+      errorContainer.classList.remove('hidden');
     } else {
-      console.error('Failed to delete daily task:', await response.text());
+      console.error('Error container not found.');
     }
-  } catch (error) {
-    console.error('Error deleting daily task:', error);
-  }
-}
+  };
 
-async function loadDailyTasks() {
-  try {
-    const response = await fetch('/api/daily');
-    if (!response.ok) {
-      throw new Error('Failed to load daily tasks!');
-    }
-    const tasks = await response.json();
-    tasks.forEach(task => displayDailyTask(task)); // Call function to display each task
-  } catch (error) {
-    console.error('Error loading daily tasks:', error.message);
+  // Initial load of profile if on profile page
+  if (window.location.pathname === '/profile.html') {
+    loadProfile();
   }
-}
+});
 
-function displayDailyTask(task) {
+document.addEventListener('DOMContentLoaded', () => {
+  // Fetch and display tasks on page load
+  fetchTasks('daily', document.getElementById('daily-task-list'));
+  fetchTasks('weekly', document.getElementById('weekly-task-list'));
+  fetchTasks('monthly', document.getElementById('monthly-task-list'));
+  fetchTasks('priority', document.getElementById('priority-task-list'));
+  fetchTasks('organized', document.getElementById('organized-task-list'));
+
+  // Daily Tasks
+  const dailyTaskInput = document.getElementById('daily-task-input');
   const dailyTaskList = document.getElementById('daily-task-list');
-  const taskItem = document.createElement('li');
+  const addDailyTaskButton = document.getElementById('add-daily-task-button');
 
-  // Checkbox for completion
-  const checkbox = document.createElement('input');
-  checkbox.type = 'checkbox';
-  checkbox.checked = task.completed; // Set checkbox state based on task.completed
-  checkbox.addEventListener('change', () => toggleTaskCompletion(task._id, checkbox.checked, taskItem));
+  addDailyTaskButton.addEventListener('click', () => {
+    createTask('daily', { text: dailyTaskInput.value.trim() }, dailyTaskInput, dailyTaskList);
+  });
 
-  // Label for the task text
-  const label = document.createElement('label');
-  label.textContent = task.text;
-  label.style.marginLeft = '10px';
-
-  // Append checkbox and label to task item
-  taskItem.appendChild(checkbox);
-  taskItem.appendChild(label);
-
-  // Add Edit and Delete buttons
-  const editButton = document.createElement('button');
-  editButton.textContent = 'Edit';
-  editButton.onclick = () => editDailyTask(task._id, taskItem);
-
-  const deleteButton = document.createElement('button');
-  deleteButton.textContent = 'Delete';
-  deleteButton.onclick = () => deleteDailyTask(task._id, taskItem);
-
-  taskItem.appendChild(editButton);
-  taskItem.appendChild(deleteButton);
-
-  dailyTaskList.appendChild(taskItem);
-}
-
-document.getElementById('add-daily-task-button').addEventListener('click', addDailyTask);
-
-document.addEventListener('DOMContentLoaded', () => {
-  loadDailyTasks();
-});
-
-//Weekly functions
-async function addWeeklyTask() {
-  const text = document.getElementById('weekly-task-input').value;
-
-  if (text) {
-    try {
-      const response = await fetch('/api/weekly', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ text })
-      });
-
-      if (response.ok) {
-        const newTask = await response.json();
-        console.log('New weekly task created:', newTask);
-
-        // Create task item
-        const taskItem = document.createElement('li');
-        taskItem.id = `weekly-task-${newTask._id}`;
-
-        // Checkbox for completion
-        const checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-        checkbox.addEventListener('change', () => toggleTaskCompletion(newTask._id, checkbox.checked, taskItem));
-
-        // Label for the task text
-        const label = document.createElement('label');
-        label.textContent = newTask.text;
-        label.style.marginLeft = '10px';
-
-        // Append checkbox and label to task item
-        taskItem.appendChild(checkbox);
-        taskItem.appendChild(label);
-
-        // Add Edit and Delete buttons
-        const editButton = document.createElement('button');
-        editButton.textContent = 'Edit';
-        editButton.onclick = () => editWeeklyTask(newTask._id, taskItem);
-
-        const deleteButton = document.createElement('button');
-        deleteButton.textContent = 'Delete';
-        deleteButton.onclick = () => deleteWeeklyTask(newTask._id, taskItem);
-
-        taskItem.appendChild(editButton);
-        taskItem.appendChild(deleteButton);
-
-        // Append task item to the weekly task list
-        const weeklyTaskList = document.getElementById('weekly-task-list');
-        weeklyTaskList.appendChild(taskItem);
-
-        // Clear the input field
-        document.getElementById('weekly-task-input').value = '';
-      } else {
-        const errorText = await response.text();
-        console.error('Failed to add weekly task:', response.statusText, errorText);
-      }
-    } catch (error) {
-      console.error('Error adding weekly task:', error);
-    }
-  } else {
-    alert('Please enter a task.');
-  }
-}
-
-async function toggleTaskCompletion(id, completed, taskItem) {
-  try {
-    const response = await fetch(`/api/weekly/${id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ completed })
-    });
-
-    if (response.ok) {
-      if (completed) {
-        taskItem.style.textDecoration = 'line-through';
-      } else {
-        taskItem.style.textDecoration = 'none';
-      }
-    } else {
-      console.error('Failed to update task completion:', await response.text());
-    }
-  } catch (error) {
-    console.error('Error updating task completion:', error);
-  }
-}
-
-async function editWeeklyTask(id, taskItem) {
-  const newText = prompt('Enter new task text:', taskItem.textContent);
-
-  if (newText) {
-    try {
-      const response = await fetch(`/api/weekly/${id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ text: newText })
-      });
-
-      if (response.ok) {
-        const updatedTask = await response.json();
-        
-        // Clear existing content in the taskItem
-        taskItem.innerHTML = '';
-
-        // Checkbox for completion
-        const checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-        checkbox.addEventListener('change', () => toggleTaskCompletion(updatedTask._id, checkbox.checked, taskItem));
-
-        // Label for the task text
-        const label = document.createElement('label');
-        label.textContent = updatedTask.text;
-        label.style.marginLeft = '10px';
-
-        // Append checkbox and label to task item
-        taskItem.appendChild(checkbox);
-        taskItem.appendChild(label);
-
-        // Add Edit and Delete buttons
-        const editButton = document.createElement('button');
-        editButton.textContent = 'Edit';
-        editButton.onclick = () => editWeeklyTask(updatedTask._id, taskItem);
-
-        const deleteButton = document.createElement('button');
-        deleteButton.textContent = 'Delete';
-        deleteButton.onclick = () => deleteWeeklyTask(updatedTask._id, taskItem);
-
-        taskItem.appendChild(editButton);
-        taskItem.appendChild(deleteButton);
-      } else {
-        console.error('Failed to update weekly task:', await response.text());
-      }
-    } catch (error) {
-      console.error('Error updating weekly task:', error);
-    }
-  } else {
-    alert('Please enter a new task text.');
-  }
-}
-
-async function deleteWeeklyTask(id, taskItem) {
-  try {
-    const response = await fetch(`/api/weekly/${id}`, {
-      method: 'DELETE'
-    });
-
-    if (response.ok) {
-      taskItem.remove();
-    } else {
-      console.error('Failed to delete weekly task:', await response.text());
-    }
-  } catch (error) {
-    console.error('Error deleting weekly task:', error);
-  }
-}
-
-async function loadWeeklyTasks() {
-  try {
-    const response = await fetch('/api/weekly');
-    if (!response.ok) {
-      throw new Error('Failed to load weekly tasks!');
-    }
-    const tasks = await response.json();
-    tasks.forEach(task => displayWeeklyTask(task)); // Call function to display each task
-  } catch (error) {
-    console.error('Error loading weekly tasks:', error.message);
-  }
-}
-
-function displayWeeklyTask(task) {
+  // Weekly Tasks
+  const weeklyTaskInput = document.getElementById('weekly-task-input');
   const weeklyTaskList = document.getElementById('weekly-task-list');
-  const taskItem = document.createElement('li');
+  const addWeeklyTaskButton = document.getElementById('add-weekly-task-button');
 
-  // Checkbox for completion
-  const checkbox = document.createElement('input');
-  checkbox.type = 'checkbox';
-  checkbox.checked = task.completed; // Set checkbox state based on task.completed
-  checkbox.addEventListener('change', () => toggleTaskCompletion(task._id, checkbox.checked, taskItem));
+  addWeeklyTaskButton.addEventListener('click', () => {
+    createTask('weekly', { text: weeklyTaskInput.value.trim() }, weeklyTaskInput, weeklyTaskList);
+  });
 
-  // Label for the task text
-  const label = document.createElement('label');
-  label.textContent = task.text;
-  label.style.marginLeft = '10px';
-
-  // Append checkbox and label to task item
-  taskItem.appendChild(checkbox);
-  taskItem.appendChild(label);
-
-  // Add Edit and Delete buttons
-  const editButton = document.createElement('button');
-  editButton.textContent = 'Edit';
-  editButton.onclick = () => editWeeklyTask(task._id, taskItem);
-
-  const deleteButton = document.createElement('button');
-  deleteButton.textContent = 'Delete';
-  deleteButton.onclick = () => deleteWeeklyTask(task._id, taskItem);
-
-  taskItem.appendChild(editButton);
-  taskItem.appendChild(deleteButton);
-
-  weeklyTaskList.appendChild(taskItem);
-}
-
-document.getElementById('add-weekly-task-button').addEventListener('click', addWeeklyTask);
-
-document.addEventListener('DOMContentLoaded', () => {
-  loadWeeklyTasks();
-});
-
-//Monthly functions
-async function addMonthlyTask() {
-  const text = document.getElementById('monthly-task-input').value;
-
-  if (text) {
-    try {
-      const response = await fetch('/api/monthly', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ text })
-      });
-
-      if (response.ok) {
-        const newTask = await response.json();
-        console.log('New monthly task created:', newTask);
-
-        // Create task item
-        const taskItem = document.createElement('li');
-        taskItem.id = `monthly-task-${newTask._id}`;
-
-        // Checkbox for completion
-        const checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-        checkbox.addEventListener('change', () => toggleTaskCompletion(newTask._id, checkbox.checked, taskItem));
-
-        // Label for the task text
-        const label = document.createElement('label');
-        label.textContent = newTask.text;
-        label.style.marginLeft = '10px';
-
-        // Append checkbox and label to task item
-        taskItem.appendChild(checkbox);
-        taskItem.appendChild(label);
-
-        // Add Edit and Delete buttons
-        const editButton = document.createElement('button');
-        editButton.textContent = 'Edit';
-        editButton.onclick = () => editMonthlyTask(newTask._id, taskItem);
-
-        const deleteButton = document.createElement('button');
-        deleteButton.textContent = 'Delete';
-        deleteButton.onclick = () => deleteMonthlyTask(newTask._id, taskItem);
-
-        taskItem.appendChild(editButton);
-        taskItem.appendChild(deleteButton);
-
-        // Append task item to the monthly task list
-        const monthlyTaskList = document.getElementById('monthly-task-list');
-        monthlyTaskList.appendChild(taskItem);
-
-        // Clear the input field
-        document.getElementById('monthly-task-input').value = '';
-      } else {
-        const errorText = await response.text();
-        console.error('Failed to add monthly task:', response.statusText, errorText);
-      }
-    } catch (error) {
-      console.error('Error adding monthly task:', error);
-    }
-  } else {
-    alert('Please enter a task.');
-  }
-}
-
-async function toggleTaskCompletion(id, completed, taskItem) {
-  try {
-    const response = await fetch(`/api/monthly/${id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ completed })
-    });
-
-    if (response.ok) {
-      if (completed) {
-        taskItem.style.textDecoration = 'line-through';
-      } else {
-        taskItem.style.textDecoration = 'none';
-      }
-    } else {
-      console.error('Failed to update task completion:', await response.text());
-    }
-  } catch (error) {
-    console.error('Error updating task completion:', error);
-  }
-}
-
-async function editMonthlyTask(id, taskItem) {
-  const newText = prompt('Enter new task text:', taskItem.textContent);
-
-  if (newText) {
-    try {
-      const response = await fetch(`/api/monthly/${id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ text: newText })
-      });
-
-      if (response.ok) {
-        const updatedTask = await response.json();
-        
-        // Clear existing content in the taskItem
-        taskItem.innerHTML = '';
-
-        // Checkbox for completion
-        const checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-        checkbox.addEventListener('change', () => toggleTaskCompletion(updatedTask._id, checkbox.checked, taskItem));
-
-        // Label for the task text
-        const label = document.createElement('label');
-        label.textContent = updatedTask.text;
-        label.style.marginLeft = '10px';
-
-        // Append checkbox and label to task item
-        taskItem.appendChild(checkbox);
-        taskItem.appendChild(label);
-
-        // Add Edit and Delete buttons
-        const editButton = document.createElement('button');
-        editButton.textContent = 'Edit';
-        editButton.onclick = () => editMonthlyTask(updatedTask._id, taskItem);
-
-        const deleteButton = document.createElement('button');
-        deleteButton.textContent = 'Delete';
-        deleteButton.onclick = () => deleteMonthlyTask(updatedTask._id, taskItem);
-
-        taskItem.appendChild(editButton);
-        taskItem.appendChild(deleteButton);
-      } else {
-        console.error('Failed to update monthly task:', await response.text());
-      }
-    } catch (error) {
-      console.error('Error updating monthly task:', error);
-    }
-  } else {
-    alert('Please enter a new task text.');
-  }
-}
-
-async function deleteMonthlyTask(id, taskItem) {
-  try {
-    const response = await fetch(`/api/monthly/${id}`, {
-      method: 'DELETE'
-    });
-
-    if (response.ok) {
-      taskItem.remove();
-    } else {
-      console.error('Failed to delete monthly task:', await response.text());
-    }
-  } catch (error) {
-    console.error('Error deleting monthly task:', error);
-  }
-}
-
-async function loadMonthlyTasks() {
-  try {
-    const response = await fetch('/api/monthly');
-    if (!response.ok) {
-      throw new Error('Failed to load monthly tasks!');
-    }
-    const tasks = await response.json();
-    displayMonthlyTasks(tasks);
-  } catch (error) {
-    console.error('Error loading monthly tasks:', error.message);
-  }
-}
-
-function displayMonthlyTasks(tasks) {
+  // Monthly Tasks
+  const monthlyTaskInput = document.getElementById('monthly-task-input');
   const monthlyTaskList = document.getElementById('monthly-task-list');
-  monthlyTaskList.innerHTML = ''; // Clear existing list
+  const addMonthlyTaskButton = document.getElementById('add-monthly-task-button');
 
-  tasks.forEach(task => {
-    const taskItem = document.createElement('li');
-
-    // Checkbox for completion
-    const checkbox = document.createElement('input');
-    checkbox.type = 'checkbox';
-    checkbox.checked = task.completed; // Set checkbox state based on task.completed
-    checkbox.addEventListener('change', () => toggleTaskCompletion(task._id, checkbox.checked, taskItem));
-
-    // Label for the task text
-    const label = document.createElement('label');
-    label.textContent = task.text;
-    label.style.marginLeft = '10px';
-
-    // Append checkbox and label to task item
-    taskItem.appendChild(checkbox);
-    taskItem.appendChild(label);
-
-    // Add Edit and Delete buttons
-    const editButton = document.createElement('button');
-    editButton.textContent = 'Edit';
-    editButton.onclick = () => editMonthlyTask(task._id, taskItem);
-
-    const deleteButton = document.createElement('button');
-    deleteButton.textContent = 'Delete';
-    deleteButton.onclick = () => deleteMonthlyTask(task._id, taskItem);
-
-    taskItem.appendChild(editButton);
-    taskItem.appendChild(deleteButton);
-
-    monthlyTaskList.appendChild(taskItem);
-  });
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-  loadMonthlyTasks();
-});
-function displayMonthlyTasks(tasks) {
-  const monthlyTaskList = document.getElementById('monthly-task-list');
-  monthlyTaskList.innerHTML = ''; // Clear existing list
-
-  tasks.forEach(task => {
-    const taskItem = document.createElement('li');
-
-    // Checkbox for completion
-    const checkbox = document.createElement('input');
-    checkbox.type = 'checkbox';
-    checkbox.checked = task.completed; // Set checkbox state based on task.completed
-    checkbox.addEventListener('change', () => toggleTaskCompletion(task._id, checkbox.checked, taskItem));
-
-    // Label for the task text
-    const label = document.createElement('label');
-    label.textContent = task.text;
-    label.style.marginLeft = '10px';
-
-    // Append checkbox and label to task item
-    taskItem.appendChild(checkbox);
-    taskItem.appendChild(label);
-
-    // Add Edit and Delete buttons
-    const editButton = document.createElement('button');
-    editButton.textContent = 'Edit';
-    editButton.onclick = () => editMonthlyTask(task._id, taskItem);
-
-    const deleteButton = document.createElement('button');
-    deleteButton.textContent = 'Delete';
-    deleteButton.onclick = () => deleteMonthlyTask(task._id, taskItem);
-
-    taskItem.appendChild(editButton);
-    taskItem.appendChild(deleteButton);
-
-    monthlyTaskList.appendChild(taskItem);
-  });
-}
-
-document.getElementById('add-monthly-task-button').addEventListener('click', addMonthlyTask);
-
-document.addEventListener('DOMContentLoaded', () => {
-  loadMonthlyTasks();
-});
-
-async function addPriorityTask() {
-  const text = document.getElementById('priority-task-input').value;
-  const level = document.getElementById('priority-level-input').value;
-
-  console.log('Add Priority Task button clicked');
-
-  if (text && level) {
-    try {
-      const response = await fetch('/api/priority', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ text, level })
-      });
-
-      console.log('Fetch request sent', response);
-
-      if (response.ok) {
-        const newTask = await response.json();
-        console.log('New priority task created:', newTask);
-
-        // Append the new task to the priority task list
-        const priorityTaskList = document.getElementById('priority-task-list');
-        const newTaskItem = document.createElement('li');
-        newTaskItem.textContent = `${newTask.level.toUpperCase()}: ${newTask.text}`;
-
-        // Add Edit and Delete buttons
-        const editButton = document.createElement('button');
-        editButton.textContent = 'Edit';
-        editButton.onclick = () => editTask(newTask._id, 'priority', newTaskItem);
-
-        const deleteButton = document.createElement('button');
-        deleteButton.textContent = 'Delete';
-        deleteButton.onclick = () => deleteTask(newTask._id, 'priority', newTaskItem);
-
-        newTaskItem.appendChild(editButton);
-        newTaskItem.appendChild(deleteButton);
-        priorityTaskList.appendChild(newTaskItem);
-
-        // Clear the input fields
-        document.getElementById('priority-task-input').value = '';
-        document.getElementById('priority-level-input').value = '';
-      } else {
-        const errorText = await response.text();
-        console.error('Failed to add priority task:', response.statusText, errorText);
-      }
-    } catch (error) {
-      console.error('Error adding priority task:', error);
-    }
-  } else {
-    alert('Please enter both a task and a priority level.');
-  }
-}
-
-async function editTask(id, type, taskItem) {
-  const newText = prompt('Enter new task text:', taskItem.firstChild.textContent.split(': ')[1]);
-  const newLevelOrCategory = prompt(`Enter new ${type === 'priority' ? 'priority level' : 'category'}:`, '');
-
-  if (newText && newLevelOrCategory) {
-    const response = await fetch(`/api/${type}/${id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ text: newText, level: newLevelOrCategory })
-    });
-
-    if (response.ok) {
-      const updatedTask = await response.json();
-      taskItem.firstChild.textContent = `${updatedTask.level.toUpperCase()}: ${updatedTask.text}`;
-    } else {
-      console.error('Failed to update task:', await response.text());
-    }
-  } else {
-    alert('Please enter both a task and a priority level/category.');
-  }
-}
-
-async function deleteTask(id, type, taskItem) {
-  const response = await fetch(`/api/${type}/${id}`, {
-    method: 'DELETE'
+  addMonthlyTaskButton.addEventListener('click', () => {
+    createTask('monthly', { text: monthlyTaskInput.value.trim() }, monthlyTaskInput, monthlyTaskList);
   });
 
-  if (response.ok) {
-    taskItem.remove();
-  } else {
-    console.error('Failed to delete task:', await response.text());
-  }
-}
+  // Priority Tasks
+  const priorityTaskInput = document.getElementById('priority-task-input');
+  const priorityLevelInput = document.getElementById('priority-level-input');
+  const priorityTaskList = document.getElementById('priority-task-list');
+  const addPriorityTaskButton = document.getElementById('add-priority-task-button');
 
-async function addOrganizedTask() {
-  const text = document.getElementById('organized-task-input').value;
-  const category = document.getElementById('category-input').value;
-
-  if (text && category) {
-    try {
-      const response = await fetch('/api/organized', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ text, category })
-      });
-
-      if (response.ok) {
-        const newTask = await response.json();
-        console.log('New organized task created:', newTask);
-
-        // Append the new task to the organized task list
-        const organizedTaskList = document.getElementById('organized-task-list');
-        const newTaskItem = document.createElement('li');
-        newTaskItem.textContent = `${newTask.category.toUpperCase()}: ${newTask.text}`;
-
-        // Add Edit and Delete buttons
-        const editButton = document.createElement('button');
-        editButton.textContent = 'Edit';
-        editButton.onclick = () => editTask(newTask._id, 'organized', newTaskItem);
-
-        const deleteButton = document.createElement('button');
-        deleteButton.textContent = 'Delete';
-        deleteButton.onclick = () => deleteTask(newTask._id, 'organized', newTaskItem);
-
-        newTaskItem.appendChild(editButton);
-        newTaskItem.appendChild(deleteButton);
-        organizedTaskList.appendChild(newTaskItem);
-
-        // Clear the input fields
-        document.getElementById('organized-task-input').value = '';
-        document.getElementById('category-input').value = '';
-      } else {
-        const errorText = await response.text();
-        console.error('Failed to add organized task:', response.statusText, errorText);
-      }
-    } catch (error) {
-      console.error('Error adding organized task:', error);
+  addPriorityTaskButton.addEventListener('click', () => {
+    const taskText = priorityTaskInput.value.trim();
+    const priorityLevel = priorityLevelInput.value.trim();
+    
+    // Ensure priority level is valid
+    const validLevels = ['High', 'Medium', 'Low'];
+    if (!validLevels.includes(priorityLevel)) {
+      console.error('Invalid priority level');
+      return;
     }
-  } else {
-    alert('Please enter both a task and a category.');
-  }
-}
-
-async function editTask(id, type, taskItem) {
-  const newText = prompt('Enter new task text:', taskItem.firstChild.textContent.split(': ')[1]);
-  const newLevelOrCategory = prompt(`Enter new ${type === 'priority' ? 'priority level' : 'category'}:`, '');
-
-  if (newText && newLevelOrCategory) {
-    const response = await fetch(`/api/${type}/${id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ text: newText, [type === 'priority' ? 'level' : 'category']: newLevelOrCategory })
-    });
-
-    if (response.ok) {
-      const updatedTask = await response.json();
-      taskItem.firstChild.textContent = `${updatedTask[type === 'priority' ? 'level' : 'category'].toUpperCase()}: ${updatedTask.text}`;
-    } else {
-      console.error('Failed to update task:', await response.text());
-    }
-  } else {
-    alert('Please enter both a task and a priority level/category.');
-  }
-}
-
-async function deleteTask(id, type, taskItem) {
-  const response = await fetch(`/api/${type}/${id}`, {
-    method: 'DELETE'
+    
+    createTask('priority', { text: taskText, level: priorityLevel }, priorityTaskInput, priorityTaskList);
   });
 
-  if (response.ok) {
-    taskItem.remove();
-  } else {
-    console.error('Failed to delete task:', await response.text());
-  }
-}
+  // Organized Tasks
+  const organizedTaskInput = document.getElementById('organized-task-input');
+  const categoryInput = document.getElementById('category-input');
+  const organizedTaskList = document.getElementById('organized-task-list');
+  const addOrganizedTaskButton = document.getElementById('add-organized-task-button');
 
-// Add event listener for the priority task button
-document.getElementById('add-priority-task-button').addEventListener('click', addPriorityTask);
-
-// Add event listener for the organized task button
-document.getElementById('add-organized-task-button').addEventListener('click', addOrganizedTask);
-
-// Function to load tasks
-async function loadTasks() {
-  try {
-    const priorityResponse = await fetch('/api/priority');
-    const organizedResponse = await fetch('/api/organized');
-
-    if (priorityResponse.ok && organizedResponse.ok) {
-      const priorityTasks = await priorityResponse.json();
-      const organizedTasks = await organizedResponse.json();
-
-      displayTasks(priorityTasks, 'priority-task-list', 'priority');
-      displayTasks(organizedTasks, 'organized-task-list', 'organized');
-    } else {
-      console.error('Failed to load tasks');
+  addOrganizedTaskButton.addEventListener('click', () => {
+    const taskText = organizedTaskInput.value.trim();
+    const category = categoryInput.value.trim();
+    
+    // Ensure category is valid
+    const validCategories = ['Work', 'Personal', 'Other'];
+    if (!validCategories.includes(category)) {
+      console.error('Invalid category');
+      return;
     }
-  } catch (error) {
-    console.error('Error loading tasks:', error);
-  }
-}
-
-function displayTasks(tasks, listId, type) {
-  const taskList = document.getElementById(listId);
-  taskList.innerHTML = '';
-
-  tasks.forEach(task => {
-    const taskItem = document.createElement('li');
-    taskItem.textContent = `${task[type === 'priority' ? 'level' : 'category'].toUpperCase()}: ${task.text}`;
-
-    // Add Edit and Delete buttons
-    const editButton = document.createElement('button');
-    editButton.textContent = 'Edit';
-    editButton.onclick = () => editTask(task._id, type, taskItem);
-
-    const deleteButton = document.createElement('button');
-    deleteButton.textContent = 'Delete';
-    deleteButton.onclick = () => deleteTask(task._id, type, taskItem);
-
-    taskItem.appendChild(editButton);
-    taskItem.appendChild(deleteButton);
-    taskList.appendChild(taskItem);
+    
+    createTask('organized', { text: taskText, category: category }, organizedTaskInput, organizedTaskList);
   });
-}
 
-// Load tasks on page load
-document.addEventListener('DOMContentLoaded', () => {
-  loadTasks();
-});
-
-async function loadReminders(user_id) {
-  try {
-    const response = await fetch(`/api/reminders/${user_id}`);
-
-    if (!response.ok) {
-      throw new Error('Failed to fetch reminders');
-    }
-
-    const reminders = await response.json();
-    displayReminders(reminders); // Call function to display reminders in the UI
-  } catch (error) {
-    console.error('Error loading reminders:', error.message);
-    displayErrorMessage('Failed to load reminders. Please try again.');
+  // Function to fetch tasks from the server and display them
+  function fetchTasks(taskType, listElement) {
+    fetch(`/api/tasks/${taskType}`)
+      .then(response => response.json())
+      .then(tasks => {
+        tasks.forEach(task => {
+          displayTask(task, listElement, taskType);
+        });
+      })
+      .catch(error => console.error('Error fetching tasks:', error));
   }
-}
 
-async function addReminder(event) {
-  event.preventDefault(); 
+  // Function to create a new task and add it to the list
+  function createTask(taskType, taskData, inputElement, listElement) {
+    if (taskData.text === '') return;
 
-  const text = document.getElementById('reminder-text').value;
-  const datetime = document.getElementById('reminder-datetime').value;
-  const user_id = '6098c5943e39e40015b2a4f7'; 
+    console.log(`Creating ${taskType} task with data:`, taskData);
 
-  try {
-    const response = await fetch('/api/reminders', { 
+    fetch(`/api/tasks/${taskType}`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ text, datetime, user_id })
-    });
-
-    if (response.ok) {
-      const newReminder = await response.json();
-      console.log('New reminder created:', newReminder);
-      appendReminderToList(newReminder); // Add new reminder to the list
-      clearForm(); // Clear the form fields
-    } else {
-      const errorText = await response.text();
-      console.error('Failed to add reminder:', errorText);
-    }
-  } catch (error) {
-    console.error('Error adding reminder:', error);
-    // Handle network or other errors
-  }
-}
-
-function appendReminderToList(reminder) {
-  const reminderList = document.getElementById('reminder-list');
-  const reminderElement = createReminderElement(reminder);
-  reminderList.appendChild(reminderElement);
-}
-
-function createReminderElement(reminder) {
-  const li = document.createElement('li');
-  li.setAttribute('data-id', reminder._id); // Set data-id for easier identification
-
-  // Display reminder text and datetime
-  const reminderText = document.createElement('span');
-  reminderText.textContent = `${reminder.text} - ${new Date(reminder.datetime).toLocaleString()}`;
-
-  // Edit button
-  const editButton = document.createElement('button');
-  editButton.textContent = 'Edit';
-  editButton.onclick = () => editReminder(reminder._id); // Assuming editReminder function is defined
-
-  // Delete button
-  const deleteButton = document.createElement('button');
-  deleteButton.textContent = 'Delete';
-  deleteButton.onclick = () => deleteReminder(reminder._id, li); // Assuming deleteReminder function is defined
-
-  // Append elements to the list item
-  li.appendChild(reminderText);
-  li.appendChild(editButton);
-  li.appendChild(deleteButton);
-
-  return li; 
-}
-
-function clearForm() {
-  document.getElementById('reminder-text').value = '';
-  document.getElementById('reminder-datetime').value = '';
-}
-
-const addReminderForm = document.getElementById('add-reminder-form');
-addReminderForm.addEventListener('submit', addReminder);
-
-async function editReminder(id) {
-  const newText = prompt('Enter new reminder text:');
-
-  if (newText) {
-    try {
-      const response = await fetch(`/api/reminders/${id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ text: newText })
-      });
-
-      if (response.ok) {
-        const updatedReminder = await response.json();
-        // Update the text in the DOM
-        const listItem = document.querySelector(`#reminder-list li[data-id="${id}"]`);
-        if (listItem) {
-          // Update text content
-          listItem.querySelector('span').textContent = `${updatedReminder.text} - ${new Date(updatedReminder.datetime).toLocaleString()}`;
+      body: JSON.stringify(taskData),
+    })
+      .then(response => {
+        if (!response.ok) {
+          return response.text().then(text => { throw new Error(text); });
         }
-      } else {
-        console.error('Failed to update reminder:', await response.text());
-      }
-    } catch (error) {
-      console.error('Error updating reminder:', error);
-    }
-  } else {
-    alert('Please enter a new reminder text.');
+        return response.json();
+      })
+      .then(newTask => {
+        displayTask(newTask, listElement, taskType);
+        inputElement.value = '';  // Clear input after adding
+      })
+      .catch(error => console.error('Error creating task:', error));
   }
-}
 
-async function deleteReminder(id, listItem) {
-  try {
-    const response = await fetch(`/api/reminders/${id}`, {
-      method: 'DELETE'
+  // Function to display a task
+  function displayTask(task, listElement, taskType) {
+    const listItem = document.createElement('li');
+    listItem.textContent = task.text;
+
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.checked = task.completed || false;
+    checkbox.addEventListener('change', () => {
+      updateTask(taskType, task._id, { completed: checkbox.checked });
     });
 
-    if (response.ok) {
-      listItem.remove(); // Remove the reminder from the DOM
-    } else {
-      console.error('Failed to delete reminder:', await response.text());
-    }
-  } catch (error) {
-    console.error('Error deleting reminder:', error);
+    const deleteButton = document.createElement('button');
+    deleteButton.textContent = 'Delete';
+    deleteButton.addEventListener('click', () => {
+      deleteTask(taskType, task._id, listItem);
+    });
+
+    listItem.prepend(checkbox);
+    listItem.appendChild(deleteButton);
+    listElement.appendChild(listItem);
   }
-}
 
-//pomodoro function
-let pomodoroInterval;
-let isPomodoroRunning = false;
-let pomodoroSeconds = 1500; // 25 minutes
+  // Function to update a task's completion status
+  function updateTask(taskType, taskId, updates) {
+    fetch(`/api/tasks/${taskType}/${taskId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(updates),
+    })
+      .then(response => response.json())
+      .catch(error => console.error('Error updating task:', error));
+  }
 
-function startPomodoro() {
-    if (!isPomodoroRunning) {
-        isPomodoroRunning = true;
-        document.getElementById('pomodoro-status').textContent = "Pomodoro Running";
-        document.getElementById('pomodoro-status').classList.remove('stopped');
-        document.getElementById('pomodoro-status').classList.add('running');
-        document.getElementById('start-pomodoro').style.display = 'none';
-        document.getElementById('stop-pomodoro').style.display = 'block';
-        pomodoroInterval = setInterval(updatePomodoro, 1000);
-    }
-}
+  // Function to delete a task
+  function deleteTask(taskType, taskId, listItem) {
+    fetch(`/api/tasks/${taskType}/${taskId}`, {
+      method: 'DELETE',
+    })
+      .then(response => {
+        if (response.ok) {
+          listItem.remove();
+        } else {
+          throw new Error('Failed to delete task');
+        }
+      })
+      .catch(error => console.error('Error deleting task:', error));
+  }
+});
 
-function stopPomodoro() {
-    if (isPomodoroRunning) {
+
+document.addEventListener('DOMContentLoaded', () => {
+  // Assuming user ID is stored in local storage after login
+  // Replace 'actual-user-id' with the real user ID fetched from storage or server
+  const userId = localStorage.getItem('user_id'); // Fetch actual user ID from local storage
+
+  if (!userId) {
+      console.error('User ID not found. Ensure user is logged in.');
+      return; // Stop execution if no user ID is found
+  }
+
+  // Fetch and display reminders on page load
+  fetchReminders(userId);
+
+  // Reminder Form
+  const reminderForm = document.getElementById('add-reminder-form');
+  reminderForm.addEventListener('submit', function (event) {
+      event.preventDefault();
+
+      const reminderText = document.getElementById('reminder-text').value.trim();
+      const reminderDatetime = document.getElementById('reminder-datetime').value;
+
+      if (reminderText !== '' && reminderDatetime !== '') {
+          createReminder(userId, { text: reminderText, dueTime: reminderDatetime });
+      }
+  });
+
+  // Function to fetch reminders from the server and display them
+  function fetchReminders(userId) {
+      fetch(`/api/reminders/${userId}`)
+          .then(response => {
+              if (!response.ok) {
+                  throw new Error('Network response was not ok');
+              }
+              return response.json();
+          })
+          .then(reminders => {
+              // Check if reminders is an array
+              if (!Array.isArray(reminders)) {
+                  throw new Error('Reminders is not an array');
+              }
+              const reminderList = document.getElementById('reminder-list');
+              reminderList.innerHTML = ''; // Clear existing reminders
+
+              reminders.forEach(reminder => {
+                  displayReminder(reminder, reminderList);
+              });
+          })
+          .catch(error => console.error('Error fetching reminders:', error));
+  }
+
+  function displayReminder(reminder, reminderList) {
+      const listItem = document.createElement('li');
+      listItem.textContent = `${reminder.text} - Due: ${new Date(reminder.dueTime).toLocaleString()}`;
+      reminderList.appendChild(listItem);
+
+      // Add a delete button for each reminder
+      const deleteButton = document.createElement('button');
+      deleteButton.textContent = 'Delete';
+      deleteButton.addEventListener('click', () => {
+          deleteReminder(reminder._id, listItem);
+      });
+      listItem.appendChild(deleteButton);
+  }
+
+  // Function to create a new reminder
+  function createReminder(userId, reminder) {
+      fetch('/api/reminders', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ ...reminder, user_id: userId })
+      })
+          .then(response => response.json())
+          .then(newReminder => {
+              const reminderList = document.getElementById('reminder-list');
+              displayReminder(newReminder, reminderList);
+          })
+          .catch(error => console.error('Error creating reminder:', error));
+  }
+
+  // Function to delete a reminder
+  function deleteReminder(reminderId, listItem) {
+      fetch(`/api/reminders/${reminderId}`, {
+          method: 'DELETE',
+      })
+          .then(() => {
+              listItem.remove();
+          })
+          .catch(error => console.error('Error deleting reminder:', error));
+  }
+});
+
+
+document.addEventListener('DOMContentLoaded', () => {
+  let pomodoroInterval;
+  let timeRemaining = 1500;  // Default 25 minutes in seconds
+
+  const pomodoroStatus = document.getElementById('pomodoro-status');
+  const timerDisplay = document.getElementById('timer-display');
+  const startPomodoro = document.getElementById('start-pomodoro');
+  const stopPomodoro = document.getElementById('stop-pomodoro');
+  const resetPomodoro = document.getElementById('reset-pomodoro');
+  const durationInput = document.getElementById('pomodoro-duration');
+
+  // Initialize timer display with saved duration
+  const savedDuration = localStorage.getItem('pomodoroDuration') || 25;
+  durationInput.value = savedDuration;
+  timeRemaining = savedDuration * 60;
+  timerDisplay.textContent = formatTime(timeRemaining);
+
+  startPomodoro.addEventListener('click', () => {
+    const minutes = parseInt(durationInput.value) || 25;
+    localStorage.setItem('pomodoroDuration', minutes);
+    timeRemaining = minutes * 60;
+    pomodoroStatus.textContent = 'Pomodoro Started';
+    startPomodoro.style.display = 'none';
+    stopPomodoro.style.display = 'block';
+    timerDisplay.textContent = formatTime(timeRemaining);
+
+    pomodoroInterval = setInterval(() => {
+      if (timeRemaining > 0) {
+        timeRemaining--;
+        timerDisplay.textContent = formatTime(timeRemaining);
+      } else {
         clearInterval(pomodoroInterval);
-        isPomodoroRunning = false;
-        document.getElementById('pomodoro-status').textContent = "Pomodoro Stopped";
-        document.getElementById('pomodoro-status').classList.remove('running');
-        document.getElementById('pomodoro-status').classList.add('stopped');
-        document.getElementById('start-pomodoro').style.display = 'block';
-        document.getElementById('stop-pomodoro').style.display = 'none';
+        alert('Pomodoro session ended!');
+        showNotification('Pomodoro session ended!', 'Take a short break!');
+        playAlertSound();
+        pomodoroStatus.textContent = 'Pomodoro Stopped';
+        startPomodoro.style.display = 'block';
+        stopPomodoro.style.display = 'none';
+        timerDisplay.textContent = '25:00';
+      }
+    }, 1000);
+  });
+
+  stopPomodoro.addEventListener('click', () => {
+    clearInterval(pomodoroInterval);
+    pomodoroStatus.textContent = 'Pomodoro Stopped';
+    startPomodoro.style.display = 'block';
+    stopPomodoro.style.display = 'none';
+  });
+
+  resetPomodoro.addEventListener('click', () => {
+    clearInterval(pomodoroInterval);
+    const minutes = parseInt(durationInput.value) || 25;
+    localStorage.setItem('pomodoroDuration', minutes);
+    timeRemaining = minutes * 60;
+    pomodoroStatus.textContent = 'Pomodoro Stopped';
+    startPomodoro.style.display = 'block';
+    stopPomodoro.style.display = 'none';
+    timerDisplay.textContent = formatTime(timeRemaining);
+  });
+
+  function formatTime(seconds) {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+  }
+
+  function showNotification(title, body) {
+    if (Notification.permission === 'granted') {
+      new Notification(title, { body });
     }
-}
+  }
 
-function updatePomodoro() {
-    if (pomodoroSeconds > 0) {
-        pomodoroSeconds--;
-        let minutes = Math.floor(pomodoroSeconds / 60);
-        let seconds = pomodoroSeconds % 60;
-        document.getElementById('timer-display').textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-    } else {
-        stopPomodoro();
-        alert('Pomodoro complete!');
-    }
-}
+  function playAlertSound() {
+    const alertSound = new Audio('path/to/alert-sound.mp3'); // Replace with the path to your sound file
+    alertSound.play();
+  }
 
-// Add event listeners for start and stop buttons
-document.getElementById('start-pomodoro').addEventListener('click', startPomodoro);
-document.getElementById('stop-pomodoro').addEventListener('click', stopPomodoro);
+  // Request notification permission if not already granted
+  if (Notification.permission !== 'granted') {
+    Notification.requestPermission();
+  }
+});
 
-//Time Tracking function
-let timeTrackingInterval;
-let isTimeTrackingRunning = false;
-let timeTrackingSeconds = 0;
+document.addEventListener('DOMContentLoaded', () => {
+  let trackingInterval;
+  let trackingTime = 0;
 
-function startTimeTracking() {
-    if (!isTimeTrackingRunning) {
-        isTimeTrackingRunning = true;
-        document.getElementById('time-tracking-status').textContent = "Time Tracking Running";
-        document.getElementById('time-tracking-status').classList.remove('stopped');
-        document.getElementById('time-tracking-status').classList.add('running');
-        document.getElementById('start-time-tracking').style.display = 'none';
-        document.getElementById('stop-time-tracking').style.display = 'block';
-        timeTrackingInterval = setInterval(updateTimeTracking, 1000);
-    }
-}
+  const timeTrackingStatus = document.getElementById('time-tracking-status');
+  const timeTrackingDisplay = document.getElementById('time-tracking-display');
+  const startTimeTracking = document.getElementById('start-time-tracking');
+  const stopTimeTracking = document.getElementById('stop-time-tracking');
+  const resetTimeTracking = document.getElementById('reset-time-tracking');
 
-function stopTimeTracking() {
-    if (isTimeTrackingRunning) {
-        clearInterval(timeTrackingInterval);
-        isTimeTrackingRunning = false;
-        document.getElementById('time-tracking-status').textContent = "Time Tracking Stopped";
-        document.getElementById('time-tracking-status').classList.remove('running');
-        document.getElementById('time-tracking-status').classList.add('stopped');
-        document.getElementById('start-time-tracking').style.display = 'block';
-        document.getElementById('stop-time-tracking').style.display = 'none';
-    }
-}
+  startTimeTracking.addEventListener('click', () => {
+    timeTrackingStatus.textContent = 'Time Tracking Started';
+    startTimeTracking.style.display = 'none';
+    stopTimeTracking.style.display = 'block';
+    resetTimeTracking.style.display = 'none';
 
-function updateTimeTracking() {
-    timeTrackingSeconds++;
-    let hours = Math.floor(timeTrackingSeconds / 3600);
-    let minutes = Math.floor((timeTrackingSeconds % 3600) / 60);
-    let seconds = timeTrackingSeconds % 60;
-    document.getElementById('time-tracking-display').textContent = `${hours}:${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-}
+    trackingInterval = setInterval(() => {
+      trackingTime++;
+      timeTrackingDisplay.textContent = formatTrackingTime(trackingTime);
+    }, 1000);
+  });
 
-// Add event listeners for start and stop buttons
-document.getElementById('start-time-tracking').addEventListener('click', startTimeTracking);
-document.getElementById('stop-time-tracking').addEventListener('click', stopTimeTracking);
+  stopTimeTracking.addEventListener('click', () => {
+    clearInterval(trackingInterval);
+    timeTrackingStatus.textContent = 'Time Tracking Stopped';
+    startTimeTracking.style.display = 'block';
+    stopTimeTracking.style.display = 'none';
+    resetTimeTracking.style.display = 'block';
+  });
+
+  resetTimeTracking.addEventListener('click', () => {
+    clearInterval(trackingInterval);
+    trackingTime = 0;
+    timeTrackingDisplay.textContent = formatTrackingTime(trackingTime);
+    timeTrackingStatus.textContent = 'Time Tracking Stopped';
+    startTimeTracking.style.display = 'block';
+    stopTimeTracking.style.display = 'none';
+    resetTimeTracking.style.display = 'none';
+  });
+
+  function formatTrackingTime(seconds) {
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const remainingSeconds = seconds % 60;
+    return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+  }
+});

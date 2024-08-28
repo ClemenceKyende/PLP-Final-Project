@@ -1,84 +1,109 @@
 const Reminder = require('../models/reminderModel');
 const mongoose = require('mongoose');
 
-// Function to create a new reminder
-exports.createReminder = async (req, res) => {
-  try {
-    const { text, datetime, user_id } = req.body;
-    
-    // Validate required fields
-    if (!text || !datetime || !user_id) {
-      return res.status(400).json({ message: 'All fields are required' });
-    }
-
-    // Create new reminder
-    const newReminder = await Reminder.create({ text, datetime, user_id });
-    
-    res.status(201).json(newReminder); // Respond with created reminder
-  } catch (error) {
-    console.error('Error creating reminder:', error.message);
-    res.status(400).json({ message: error.message }); // Handle error
-  }
-};
-
-// Function to get all reminders for a user
+// Fetch all reminders for a specific user
 exports.getAllReminders = async (req, res) => {
-  try {
-    const { user_id } = req.params;
-    
-    // Find all reminders for the specified user
-    const reminders = await Reminder.find({ user_id });
-    
-    res.json(reminders); // Respond with reminders
-  } catch (error) {
-    console.error('Error fetching reminders:', error.message);
-    res.status(400).json({ message: error.message }); // Handle error
-  }
-};  
-  
-// Function to update a specific reminder
+    try {
+        const { user_id } = req.params;
+
+        // Ensure user_id is a valid ObjectId if using MongoDB
+        if (!mongoose.Types.ObjectId.isValid(user_id)) {
+            return res.status(400).json({ message: 'Invalid user ID format' });
+        }
+
+        // Convert user_id to ObjectId
+        const objectId = mongoose.Types.ObjectId(user_id);
+
+        const reminders = await Reminder.find({ user_id: objectId });
+
+        // Ensure the response is always an array
+        if (!Array.isArray(reminders)) {
+            return res.status(500).json({ message: 'Unexpected response format from database' });
+        }
+
+        res.json(reminders); // Send reminders as JSON
+    } catch (error) {
+        console.error('Error fetching reminders:', error.message);
+        res.status(400).json({ message: error.message }); // Send error message if something goes wrong
+    }
+};
+
+// Create a new reminder
+exports.createReminder = async (req, res) => {
+    try {
+        const { text, dueTime, user_id } = req.body;
+
+        // Ensure user_id is a valid ObjectId if using MongoDB
+        if (!mongoose.Types.ObjectId.isValid(user_id)) {
+            return res.status(400).json({ message: 'Invalid user ID format' });
+        }
+
+        // Convert user_id to ObjectId
+        const objectId = mongoose.Types.ObjectId(user_id);
+
+        const newReminder = new Reminder({ text, dueTime, user_id: objectId });
+        await newReminder.save();
+        
+        res.status(201).json(newReminder); // Send the created reminder as response
+    } catch (error) {
+        console.error('Error creating reminder:', error.message);
+        res.status(400).json({ message: error.message }); // Handle error
+    }
+};
+
+// Update an existing reminder
 exports.updateReminder = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { text, datetime, completed } = req.body;
-    
-    // Find and update the reminder
-    const updatedReminder = await Reminder.findByIdAndUpdate(
-      id,
-      { text, datetime, completed },
-      { new: true }
-    );
+    try {
+        const { reminder_id } = req.params;
+        const { text, dueTime, completed } = req.body;
 
-    // Check if reminder was found and updated
-    if (!updatedReminder) {
-      return res.status(404).json({ message: 'Reminder not found' });
+        // Ensure reminder_id is a valid ObjectId if using MongoDB
+        if (!mongoose.Types.ObjectId.isValid(reminder_id)) {
+            return res.status(400).json({ message: 'Invalid reminder ID format' });
+        }
+
+        // Convert reminder_id to ObjectId
+        const objectId = mongoose.Types.ObjectId(reminder_id);
+
+        const updatedReminder = await Reminder.findByIdAndUpdate(
+            objectId,
+            { text, dueTime, completed },
+            { new: true }
+        );
+
+        if (!updatedReminder) {
+            return res.status(404).json({ message: 'Reminder not found' });
+        }
+
+        res.json(updatedReminder); // Send the updated reminder as response
+    } catch (error) {
+        console.error('Error updating reminder:', error.message);
+        res.status(400).json({ message: error.message }); // Handle error
     }
-
-    res.json(updatedReminder); // Respond with updated reminder
-  } catch (error) {
-    console.error('Error updating reminder:', error.message);
-    res.status(400).json({ message: error.message }); // Handle error
-  }
 };
 
-// Function to delete a specific reminder
+// Delete an existing reminder
 exports.deleteReminder = async (req, res) => {
-  try {
-    const { id } = req.params;
-    
-    // Find and delete the reminder
-    const deletedReminder = await Reminder.findByIdAndDelete(id);
+    try {
+        const { reminder_id } = req.params;
 
-    // Check if reminder was found and deleted
-    if (!deletedReminder) {
-      return res.status(404).json({ message: 'Reminder not found' });
+        // Ensure reminder_id is a valid ObjectId if using MongoDB
+        if (!mongoose.Types.ObjectId.isValid(reminder_id)) {
+            return res.status(400).json({ message: 'Invalid reminder ID format' });
+        }
+
+        // Convert reminder_id to ObjectId
+        const objectId = mongoose.Types.ObjectId(reminder_id);
+
+        const deletedReminder = await Reminder.findByIdAndDelete(objectId);
+
+        if (!deletedReminder) {
+            return res.status(404).json({ message: 'Reminder not found' });
+        }
+
+        res.json({ message: 'Reminder deleted successfully', reminder: deletedReminder }); // Send confirmation of deletion
+    } catch (error) {
+        console.error('Error deleting reminder:', error.message);
+        res.status(400).json({ message: error.message }); // Handle error
     }
-
-    res.json({ message: 'Reminder deleted successfully' }); // Respond with success message
-  } catch (error) {
-    console.error('Error deleting reminder:', error.message);
-    res.status(400).json({ message: error.message }); // Handle error
-  }
 };
-
-module.exports = exports;

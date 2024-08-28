@@ -6,6 +6,9 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs'); // Using 'bcryptjs'
 const app = require('./app'); // Ensure this path is correct
 
+// Start the scheduler (corrected path)
+require('../scripts/scheduler'); // This line starts the scheduler
+
 // Logging environment variables to debug
 console.log('MONGO_URI:', process.env.MONGO_URI);
 console.log('PORT:', process.env.PORT);

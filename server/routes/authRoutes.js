@@ -3,10 +3,10 @@ const router = express.Router();
 const authController = require('../controllers/authController');
 
 // Sign-up route 
-router.post('/signup',authController.signup);
+router.post('/signup',authController.signupUser);
 
 // Login route 
-router.post('/login',authController.login);
+router.post('/login',authController.loginUser);
 
 // Route to send a password reset email 
 router.post('/send-reset-password-email',authController.sendResetPasswordEmail);

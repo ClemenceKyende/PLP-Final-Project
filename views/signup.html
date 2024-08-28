@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up - TimeWise</title>
+  <link rel="stylesheet" type="text/css" href="/styles.css">
+</head>
+<body>
+  <header>
+    <div id="logo">
+      <img src="/images/TimeWise-logo.jpg" alt="TimeWise Logo" width="200" height="auto">
+    </div>
+    <ul id="navigation-buttons" class="navigation-buttons">
+      <li><a href="/">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="dashboard.html">Dashboard</a></li>
+      <li><a href="profile.html">Profile</a></li>
+      <li><button id="logout-button">Log Out</button></li>
+    </ul>
+  </header>
+  
+  <main>
+    <form id="signup-form">
+      <h2>Signup</h2>
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" required>
+      </div>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required>
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required>
+      </div>
+      <div class="form-group">
+        <button type="submit">Signup</button>
+      </div>
+      <p>Already have an account? <a href="login.html">Login here</a></p>
+    </form>
+  </main>
+
+  <footer id="footer">
+   <div>
+    <p>&copy; 2024 TimeWise. All rights reserved.</p>
+   </div>
+  </footer>
+  
+  <script src="/script.js"></script>
+</body>
+</html>
