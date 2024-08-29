@@ -532,7 +532,11 @@ document.addEventListener('DOMContentLoaded', () => {
       const reminderDatetime = document.getElementById('reminder-datetime').value;
 
       if (reminderText !== '' && reminderDatetime !== '') {
-          createReminder(userId, { text: reminderText, datetime: reminderDatetime });
+          // Convert local time to UTC
+          const localDatetime = new Date(reminderDatetime);
+          const utcDatetime = localDatetime.toISOString(); // Convert to UTC
+
+          createReminder(userId, { text: reminderText, datetime: utcDatetime });
       }
   });
 
@@ -570,8 +574,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Function to display a reminder
   function displayReminder(reminder, listElement) {
+      // Convert UTC datetime to local time for display
+      const localDatetime = new Date(reminder.datetime).toLocaleString();
+
       const listItem = document.createElement('li');
-      listItem.textContent = `${reminder.text} - ${new Date(reminder.datetime).toLocaleString()}`; // Use backticks here
+      listItem.textContent = `${reminder.text} - ${localDatetime}`;
 
       const deleteButton = document.createElement('button');
       deleteButton.textContent = 'Delete';
@@ -582,11 +589,11 @@ document.addEventListener('DOMContentLoaded', () => {
       listItem.appendChild(deleteButton);
       listElement.appendChild(listItem);
 
-      // Optionally, set a timeout to alert the user when the reminder is due
+      // Optionally set a timeout to alert the user when the reminder is due
       const timeUntilReminder = new Date(reminder.datetime) - new Date();
       if (timeUntilReminder > 0) {
           setTimeout(() => {
-              alert(`Reminder: ${reminder.text}`); // Use backticks here
+              alert(`Reminder: ${reminder.text}`);
           }, timeUntilReminder);
       }
   }

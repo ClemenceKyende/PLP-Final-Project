@@ -570,14 +570,13 @@ input, select {
 @media (max-width: 600px) {
   .dashboard-section {
     flex-direction: column;
-    align-items: stretch;
+    align-items: center;
   }
 
   button, input, select {
     width: 100%;
   }
 }
-
 
 /* Error Container */
 #error-container {

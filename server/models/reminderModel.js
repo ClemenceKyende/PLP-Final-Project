@@ -17,13 +17,16 @@ const reminderSchema = new Schema({
     required: true
   },
   user_id: {
-    type: String, // Accept user_id as a string
+    type: Schema.Types.ObjectId, 
+    ref: 'user', 
     required: true
   },
   completed: {
     type: Boolean,
     default: false
   }
+}, {
+  timestamps: true // Automatically add createdAt and updatedAt fields
 });
 
 const Reminder = mongoose.model('Reminder', reminderSchema);
