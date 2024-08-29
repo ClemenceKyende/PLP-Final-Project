@@ -468,7 +468,18 @@ document.addEventListener('DOMContentLoaded', () => {
   // Function to display a task
   function displayTask(task, listElement, taskType) {
     const listItem = document.createElement('li');
-    listItem.textContent = task.text;
+
+    // Display task text
+    let taskContent = `${task.text}`;
+
+    // Add category or priority level if available
+    if (taskType === 'organized' && task.category) {
+      taskContent += ` (Category: ${task.category})`;
+    } else if (taskType === 'priority' && task.level) {
+      taskContent += ` (Priority: ${task.level})`;
+    }
+
+    listItem.textContent = taskContent;
 
     const checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
@@ -506,16 +517,13 @@ document.addEventListener('DOMContentLoaded', () => {
     fetch(`/api/tasks/${taskType}/${taskId}`, {
       method: 'DELETE',
     })
-      .then(response => {
-        if (response.ok) {
-          listItem.remove();
-        } else {
-          throw new Error('Failed to delete task');
-        }
+      .then(() => {
+        listItem.remove();
       })
       .catch(error => console.error('Error deleting task:', error));
   }
 });
+
 
 document.addEventListener('DOMContentLoaded', () => {
   const userId = 'user-id-placeholder'; // Replace this with the actual user ID
