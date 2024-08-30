@@ -526,12 +526,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 document.addEventListener('DOMContentLoaded', () => {
-  const userId = 'user-id-placeholder'; // Replace this with the actual user ID
+  const userId = localStorage.getItem('userId'); // Ensure userId is set in localStorage
 
-  // Fetch and display reminders on page load
+  if (!userId) {
+      console.error('No userId found in localStorage');
+      return;
+  }
+
   fetchReminders(userId);
 
-  // Reminder Form
   const reminderForm = document.getElementById('add-reminder-form');
   reminderForm.addEventListener('submit', function (event) {
       event.preventDefault();
@@ -540,30 +543,33 @@ document.addEventListener('DOMContentLoaded', () => {
       const reminderDatetime = document.getElementById('reminder-datetime').value;
 
       if (reminderText !== '' && reminderDatetime !== '') {
-          // Convert local time to UTC
-          const localDatetime = new Date(reminderDatetime);
-          const utcDatetime = localDatetime.toISOString(); // Convert to UTC
-
-          createReminder(userId, { text: reminderText, datetime: utcDatetime });
+          createReminder(userId, { text: reminderText, datetime: reminderDatetime });
       }
   });
 
-  // Function to fetch reminders from the server and display them
   function fetchReminders(userId) {
-      fetch(`/api/reminders/${userId}`) // Use backticks here
-          .then(response => response.json())
+      fetch(`/api/reminders/${userId}`)
+          .then(response => {
+              if (!response.ok) {
+                  throw new Error('Network response was not ok');
+              }
+              return response.json();
+          })
           .then(reminders => {
               const reminderList = document.getElementById('reminder-list');
-              reminderList.innerHTML = ''; // Clear existing reminders
+              reminderList.innerHTML = '';
 
-              reminders.forEach(reminder => {
-                  displayReminder(reminder, reminderList);
-              });
+              if (Array.isArray(reminders)) {
+                  reminders.forEach(reminder => {
+                      displayReminder(reminder, reminderList);
+                  });
+              } else {
+                  console.error('Unexpected response format:', reminders);
+              }
           })
           .catch(error => console.error('Error fetching reminders:', error));
   }
 
-  // Function to create a new reminder
   function createReminder(userId, reminderData) {
       fetch('/api/reminders', {
           method: 'POST',
@@ -572,21 +578,22 @@ document.addEventListener('DOMContentLoaded', () => {
           },
           body: JSON.stringify({ ...reminderData, user_id: userId }),
       })
-          .then(response => response.json())
-          .then(newReminder => {
-              const reminderList = document.getElementById('reminder-list');
-              displayReminder(newReminder, reminderList);
-          })
-          .catch(error => console.error('Error creating reminder:', error));
+      .then(response => {
+          if (!response.ok) {
+              throw new Error('Network response was not ok');
+          }
+          return response.json();
+      })
+      .then(newReminder => {
+          const reminderList = document.getElementById('reminder-list');
+          displayReminder(newReminder, reminderList);
+      })
+      .catch(error => console.error('Error creating reminder:', error));
   }
 
-  // Function to display a reminder
   function displayReminder(reminder, listElement) {
-      // Convert UTC datetime to local time for display
-      const localDatetime = new Date(reminder.datetime).toLocaleString();
-
       const listItem = document.createElement('li');
-      listItem.textContent = `${reminder.text} - ${localDatetime}`;
+      listItem.textContent = `${reminder.text} - ${new Date(reminder.datetime).toLocaleString()}`;
 
       const deleteButton = document.createElement('button');
       deleteButton.textContent = 'Delete';
@@ -597,7 +604,6 @@ document.addEventListener('DOMContentLoaded', () => {
       listItem.appendChild(deleteButton);
       listElement.appendChild(listItem);
 
-      // Optionally set a timeout to alert the user when the reminder is due
       const timeUntilReminder = new Date(reminder.datetime) - new Date();
       if (timeUntilReminder > 0) {
           setTimeout(() => {
@@ -606,17 +612,20 @@ document.addEventListener('DOMContentLoaded', () => {
       }
   }
 
-  // Function to delete a reminder
   function deleteReminder(reminderId, listItem) {
-      fetch(`/api/reminders/${reminderId}`, { // Use backticks here
+      fetch(`/api/reminders/${reminderId}`, {
           method: 'DELETE',
       })
-          .then(() => {
-              listItem.remove();
-          })
-          .catch(error => console.error('Error deleting reminder:', error));
+      .then(response => {
+          if (!response.ok) {
+              throw new Error('Network response was not ok');
+          }
+          listItem.remove();
+      })
+      .catch(error => console.error('Error deleting reminder:', error));
   }
 });
+
 
 document.addEventListener('DOMContentLoaded', () => {
   let pomodoroInterval;
@@ -747,5 +756,38 @@ document.addEventListener('DOMContentLoaded', () => {
     const minutes = Math.floor((seconds % 3600) / 60);
     const remainingSeconds = seconds % 60;
     return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+  }
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  const themeSelect = document.getElementById('theme-select');
+  const layoutSelect = document.getElementById('layout-select');
+  const customizationForm = document.getElementById('customization-form');
+
+  // Apply saved customizations from localStorage
+  const savedTheme = localStorage.getItem('theme') || 'light';
+  const savedLayout = localStorage.getItem('layout') || 'default';
+  
+  applyCustomizations(savedTheme, savedLayout);
+
+  // Handle form submission
+  customizationForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const theme = themeSelect.value;
+      const layout = layoutSelect.value;
+
+      // Save customizations to localStorage
+      localStorage.setItem('theme', theme);
+      localStorage.setItem('layout', layout);
+
+      applyCustomizations(theme, layout);
+  });
+
+  function applyCustomizations(theme, layout) {
+      // Remove existing classes
+      document.body.classList.remove('light-theme', 'dark-theme', 'compact-layout', 'default-layout');
+      
+      // Add new classes based on user selection
+      document.body.classList.add(`${theme}-theme`, `${layout}-layout`);
   }
 });

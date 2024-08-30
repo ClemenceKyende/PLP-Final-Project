@@ -7,6 +7,82 @@
 
 Welcome to TimeWise, your ultimate productivity and time management web app! TimeWise is designed to help you take control of your time and enhance your productivity levels, whether you're a student, professional, or someone simply looking to manage personal tasks more efficiently.
 
+
+## Prerequisites
+
+Before running the application, make sure you have the following installed:
+- **Node.js**: [Download Node.js](https://nodejs.org/)
+- **npm**: Comes with Node.js, but ensure it's installed (`npm --version` to check)
+- **MongoDB**: 
+  - For local development: [Download MongoDB](https://www.mongodb.com/try/download/community)
+  - For cloud-based development: [Create a MongoDB Atlas account](https://www.mongodb.com/cloud/atlas)
+
+## Setup Instructions
+
+**Clone the Repository**
+
+
+   git clone <repository_url>
+   cd <repository_directory>
+
+**Create and Configure the `.env` File**
+
+   - Copy the `.env.example` file to create your own `.env` file:
+
+     ```bash
+     cp .env.example .env
+     ```
+
+   - Ensure that the `.env` file is placed in the root directory of your project (i.e., the same directory where the `package.json` file is located).
+
+   - Open the `.env` file and update the placeholders with your actual values:
+
+     ```plaintext
+     MONGO_URI=mongodb+srv://<username>:<password>@cluster0.mongodb.net/<database_name>?retryWrites=true&w=majority
+     JWT_SECRET=<your_jwt_secret>
+     SMTP_HOST=smtp.gmail.com
+     SMTP_PORT=587
+     SMTP_USER=<your_smtp_user>
+     SMTP_PASS=<your_smtp_password>
+     PORT=5000
+     ```
+
+   - Replace `<username>`, `<password>`, `<database_name>`, `<your_jwt_secret>`, `<your_smtp_user>`, and `<your_smtp_password>` with your actual values.
+
+**Install Dependencies**
+
+   - Ensure you are in the project directory and install the necessary npm packages:
+
+     ```bash
+     npm install
+     ```
+
+**Run the Application**
+
+   - Start the application using the following command:
+
+     ```bash
+     npm start
+     ```
+
+   - The application should now be running on [http://localhost:5000](http://localhost:5000) (or the port specified in your `.env` file).
+
+**Testing and Verification**
+
+   - Visit [http://localhost:5000](http://localhost:5000) in your web browser to ensure the application is running correctly.
+   - Verify that the application is able to connect to MongoDB and other services by checking for any errors in the terminal or browser.
+
+**Troubleshooting**
+
+   - If you encounter issues, refer to the **Troubleshooting** section in this document for common problems and solutions.
+   - Ensure all environment variables in the `.env` file are correctly set.
+   - Check that all dependencies are installed and up to date.
+
+**Live Demo**
+
+If you encounter issues while setting up the application locally or would like to see a live example, you can access the deployed version of TimeWise here: [TimeWise Live Demo](https://plp-final-project.vercel.app/)
+
+
 ## Features
 
 - **Task Management -** Easily create, organize, and prioritize tasks to stay on top of your to-do list.

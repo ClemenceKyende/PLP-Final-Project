@@ -423,6 +423,13 @@ button:hover, .get-started-button:hover {
     margin: 10px;
   }
 
+  /* Media query for smaller screens */
+@media (max-width: 768px) {
+  #dashboard-content > div {
+      width: 80%; /* Adjust width to 90% for smaller screens */
+      margin: 0 auto; /* Center the div horizontally */
+  }
+}
   #dashboard-content {
     flex-direction: column;
     gap: 10px;
@@ -583,4 +590,196 @@ input, select {
   color: red;
   font-size: 16px;
   margin-top: 20px;
+}
+
+/* Customization Styles */
+body {
+  margin: 0;
+  padding: 0;
+}
+
+/* Light Theme */
+body.light-theme {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+/* Dark Theme */
+body.dark-theme {
+  background-color: #121212;
+  color: #ffffff;
+}
+
+/* Solarized Light Theme */
+body.solarized-light-theme {
+  background-color: #fdf6e3;
+  color: #657b83;
+}
+
+/* Solarized Dark Theme */
+body.solarized-dark-theme {
+  background-color: #002b36;
+  color: #839496;
+}
+
+/* High Contrast Theme */
+body.high-contrast-theme {
+  background-color: #000000;
+  color: #ffffff;
+  font-weight: bold;
+}
+
+/* Minimalist Theme */
+body.minimalist-theme {
+  background-color: #f5f5f5;
+  color: #333333;
+  font-size: 18px;
+  line-height: 1.5;
+}
+
+/* Default Layout */
+body.default-layout {
+  padding: 20px;
+}
+
+/* Compact Layout */
+body.compact-layout {
+  padding: 10px;
+  font-size: 0.9em;
+}
+
+/* Minimalist Layout */
+body.minimalist-layout {
+  padding: 15px;
+  font-family: Arial, sans-serif;
+  color: #333;
+  background-color: #f4f4f4;
+}
+
+/* Grid Layout */
+body.grid-layout .profile-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+/* Card Layout */
+body.card-layout .profile-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+body.card-layout .profile-info, 
+body.card-layout #customization-options {
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  padding: 15px;
+  margin: 10px;
+  border-radius: 5px;
+}
+
+/* Sidebar Layout */
+body.sidebar-layout {
+  display: flex;
+}
+body.sidebar-layout #navigation-buttons {
+  width: 200px;
+  border-right: 1px solid #ddd;
+  height: 100vh;
+}
+body.sidebar-layout main {
+  flex: 1;
+  padding-left: 220px;
+}
+
+/* Wide Layout */
+body.wide-layout {
+  max-width: 1200px;
+  margin: auto;
+}
+
+/* Header Styles */
+header {
+  background-color: #f8f8f8;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+#logo img {
+  width: 200px;
+  height: auto;
+}
+
+ul.navigation-buttons {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+ul.navigation-buttons li {
+  display: inline;
+  margin-right: 15px;
+}
+
+ul.navigation-buttons li a {
+  text-decoration: none;
+  color: #333;
+}
+
+ul.navigation-buttons li a.active {
+  font-weight: bold;
+}
+
+/* Profile Container Styles */
+.profile-container {
+  margin: 20px;
+}
+
+.profile-pic {
+  border-radius: 50%;
+  width: 100px;
+  height: 100px;
+}
+
+.profile-info p {
+  margin: 5px 0;
+}
+
+.hidden {
+  display: none;
+}
+
+/* Form Styles */
+.form-group {
+  margin-bottom: 10px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.form-group input, .form-group select {
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+}
+
+button {
+  padding: 10px 20px;
+  border: none;
+  background-color: #007bff;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+/* Footer Styles */
+footer {
+  background-color: #f8f8f8;
+  padding: 10px;
+  text-align: center;
+  border-top: 1px solid #ddd;
 }
