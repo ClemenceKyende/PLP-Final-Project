@@ -423,13 +423,6 @@ button:hover, .get-started-button:hover {
     margin: 10px;
   }
 
-  /* Media query for smaller screens */
-@media (max-width: 768px) {
-  #dashboard-content > div {
-      width: 80%; /* Adjust width to 90% for smaller screens */
-      margin: 0 auto; /* Center the div horizontally */
-  }
-}
   #dashboard-content {
     flex-direction: column;
     gap: 10px;

@@ -526,15 +526,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 document.addEventListener('DOMContentLoaded', () => {
-  const userId = localStorage.getItem('userId'); // Ensure userId is set in localStorage
+  const userId = 'user-id-placeholder'; // Replace this with the actual user ID
 
-  if (!userId) {
-      console.error('No userId found in localStorage');
-      return;
-  }
-
+  // Fetch and display reminders on page load
   fetchReminders(userId);
 
+  // Reminder Form
   const reminderForm = document.getElementById('add-reminder-form');
   reminderForm.addEventListener('submit', function (event) {
       event.preventDefault();
@@ -547,29 +544,22 @@ document.addEventListener('DOMContentLoaded', () => {
       }
   });
 
+  // Function to fetch reminders from the server and display them
   function fetchReminders(userId) {
-      fetch(`/api/reminders/${userId}`)
-          .then(response => {
-              if (!response.ok) {
-                  throw new Error('Network response was not ok');
-              }
-              return response.json();
-          })
+      fetch(`/api/reminders/${userId}`) // Use backticks here
+          .then(response => response.json())
           .then(reminders => {
               const reminderList = document.getElementById('reminder-list');
-              reminderList.innerHTML = '';
+              reminderList.innerHTML = ''; // Clear existing reminders
 
-              if (Array.isArray(reminders)) {
-                  reminders.forEach(reminder => {
-                      displayReminder(reminder, reminderList);
-                  });
-              } else {
-                  console.error('Unexpected response format:', reminders);
-              }
+              reminders.forEach(reminder => {
+                  displayReminder(reminder, reminderList);
+              });
           })
           .catch(error => console.error('Error fetching reminders:', error));
   }
 
+  // Function to create a new reminder
   function createReminder(userId, reminderData) {
       fetch('/api/reminders', {
           method: 'POST',
@@ -578,22 +568,18 @@ document.addEventListener('DOMContentLoaded', () => {
           },
           body: JSON.stringify({ ...reminderData, user_id: userId }),
       })
-      .then(response => {
-          if (!response.ok) {
-              throw new Error('Network response was not ok');
-          }
-          return response.json();
-      })
-      .then(newReminder => {
-          const reminderList = document.getElementById('reminder-list');
-          displayReminder(newReminder, reminderList);
-      })
-      .catch(error => console.error('Error creating reminder:', error));
+          .then(response => response.json())
+          .then(newReminder => {
+              const reminderList = document.getElementById('reminder-list');
+              displayReminder(newReminder, reminderList);
+          })
+          .catch(error => console.error('Error creating reminder:', error));
   }
 
+  // Function to display a reminder
   function displayReminder(reminder, listElement) {
       const listItem = document.createElement('li');
-      listItem.textContent = `${reminder.text} - ${new Date(reminder.datetime).toLocaleString()}`;
+      listItem.textContent = `${reminder.text} - ${new Date(reminder.datetime).toLocaleString()}`; // Use backticks here
 
       const deleteButton = document.createElement('button');
       deleteButton.textContent = 'Delete';
@@ -604,28 +590,26 @@ document.addEventListener('DOMContentLoaded', () => {
       listItem.appendChild(deleteButton);
       listElement.appendChild(listItem);
 
+      // Optionally, set a timeout to alert the user when the reminder is due
       const timeUntilReminder = new Date(reminder.datetime) - new Date();
       if (timeUntilReminder > 0) {
           setTimeout(() => {
-              alert(`Reminder: ${reminder.text}`);
+              alert(`Reminder: ${reminder.text}`); // Use backticks here
           }, timeUntilReminder);
       }
   }
 
+  // Function to delete a reminder
   function deleteReminder(reminderId, listItem) {
-      fetch(`/api/reminders/${reminderId}`, {
+      fetch(`/api/reminders/${reminderId}`, { // Use backticks here
           method: 'DELETE',
       })
-      .then(response => {
-          if (!response.ok) {
-              throw new Error('Network response was not ok');
-          }
-          listItem.remove();
-      })
-      .catch(error => console.error('Error deleting reminder:', error));
+          .then(() => {
+              listItem.remove();
+          })
+          .catch(error => console.error('Error deleting reminder:', error));
   }
 });
-
 
 document.addEventListener('DOMContentLoaded', () => {
   let pomodoroInterval;
