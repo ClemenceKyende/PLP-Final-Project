@@ -34,7 +34,7 @@ h1, h2, h3 {
   height: auto;
 }
 
-/* Buttons */
+/* Default Button Styles */
 button, .get-started-button {
   background-color: #0056b3;
   color: #fff;
@@ -44,10 +44,31 @@ button, .get-started-button {
   border-radius: 5px;
   text-decoration: none;
   transition: background-color 0.3s ease;
+  margin: 10px; /* Add margin to create spacing between buttons */
 }
 
 button:hover, .get-started-button:hover {
   background-color: #004494;
+}
+
+/* Media Queries */
+
+/* For tablets and smaller devices (up to 768px) */
+@media (max-width: 768px) {
+  button, .get-started-button {
+    padding: 8px 16px; /* Adjust padding for smaller screens */
+    font-size: 14px; /* Reduce font size for better fit */
+    margin: 8px; /* Adjust margin for smaller screens */
+  }
+}
+
+/* For mobile devices (up to 480px) */
+@media (max-width: 480px) {
+  button, .get-started-button {
+    padding: 6px 12px; /* Further reduce padding for very small screens */
+    font-size: 12px; /* Reduce font size further for very small screens */
+    margin: 6px; /* Further adjust margin for very small screens */
+  }
 }
 
 .get-started-button {
@@ -91,6 +112,21 @@ input[type="text"], input[type="email"], input[type="password"], input[type="dat
   background-color: #d0e0ff;
 }
 
+@media (max-width: 768px) {
+  /* Stack navigation buttons vertically on small screens */
+  #navigation-buttons {
+    flex-direction: column;
+  }
+
+  #navigation-buttons button {
+    margin: 10px 0;
+  }
+}
+
+ul.navigation-buttons li a {
+  font-weight: bold;
+}
+
 /* Page Containers */
 #home-page, #about-page, #dashboard, #signup-form, #login-form, #forgot-password-form {
   background-color: rgba(240, 240, 240, 0.9);
@@ -126,7 +162,7 @@ main section {
   margin: 20px;
 }
 
-/* Features */
+ /* Features */
 .feature {
   background-color: #fff;
   margin: 10px 0;
@@ -229,7 +265,7 @@ button:hover, .get-started-button:hover {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Dashboard */
+/* Default styles for dashboard */
 #dashboard {
   display: block;
   padding: 20px;
@@ -269,6 +305,55 @@ button:hover, .get-started-button:hover {
   margin-top: 0;
 }
 
+/* Media Query for Tablets and Smaller Screens */
+@media (max-width: 768px) {
+  #dashboard {
+    padding: 15px;
+  }
+
+  #dashboard-content {
+    flex-direction: column; /* Stack items vertically */
+    gap: 15px;
+  }
+
+  #dashboard-content > div {
+    min-width: auto; /* Remove min-width constraint */
+    padding: 10px;
+  }
+
+  #dashboard h2 {
+    font-size: 20px;
+  }
+
+  #dashboard-content h3 {
+    font-size: 18px;
+  }
+}
+
+/* Media Query for Mobile Screens */
+@media (max-width: 480px) {
+  #dashboard {
+    padding: 10px;
+  }
+
+  #dashboard-content {
+    gap: 10px;
+  }
+
+  #dashboard-content > div {
+    padding: 10px;
+  }
+
+  #dashboard h2 {
+    font-size: 18px;
+  }
+
+  #dashboard-content h3 {
+    font-size: 16px;
+  }
+}
+
+
 /* Task Lists */
 #task-list, #daily-task-list, #weekly-task-list, #monthly-task-list, #priority-task-list, #organized-task-list {
   list-style-type: none;
@@ -287,40 +372,77 @@ button:hover, .get-started-button:hover {
   margin-left: 10px;
 }
 
-/* Pomodoro Timer */
-#pomodoro {
-  text-align: center;
+/* Specific Button Styles */
+#start-pomodoro {
+  background-color: #28a745;
 }
 
-#pomodoro-status.stopped {
-  color: red;
+#start-pomodoro:hover {
+  background-color: #218838;
 }
 
-#pomodoro-status.running {
-  color: green;
+#stop-pomodoro {
+  background-color: #dc3545;
 }
 
-#timer-display {
-  font-size: 2em;
-  margin: 10px 0;
+#stop-pomodoro:hover {
+  background-color: #c82333;
 }
 
-/* Time Tracking */
-#time-tracking {
-  text-align: center;
+#reset-pomodoro {
+  background-color: #ffc107;
 }
 
-#time-tracking-status.stopped {
-  color: red;
+#reset-pomodoro:hover {
+  background-color: #e0a800;
 }
 
-#time-tracking-status.running {
-  color: green;
+#start-time-tracking {
+  background-color: #28a745;
 }
 
-#time-tracking-display {
-  font-size: 2em;
-  margin: 10px 0;
+#start-time-tracking:hover {
+  background-color: #218838;
+}
+
+#stop-time-tracking {
+  background-color: #dc3545;
+}
+
+#stop-time-tracking:hover {
+  background-color: #c82333;
+}
+
+#reset-time-tracking {
+  background-color: #ffc107;
+}
+
+#reset-time-tracking:hover {
+  background-color: #e0a800;
+}
+
+/* Styling for Pomodoro Duration Input */
+#pomodoro-duration {
+  width: 80px;             
+  padding: 5px;            
+  margin: 10px 0;          
+  border: 1px solid #ddd;  
+  border-radius: 5px;      
+  font-size: 16px;         
+  text-align: center;      
+}
+
+/* Ensure spinner arrows are always visible in WebKit browsers */
+#pomodoro-duration::-webkit-inner-spin-button,
+#pomodoro-duration::-webkit-outer-spin-button {
+  opacity: 1;              
+  display: block;          
+}
+
+input[type="number"]::-moz-inner-spin-button,
+input[type="number"]::-moz-outer-spin-button {
+  opacity: 1;              
+  display: inline;         
 }
 
 /* Authentication Forms */
@@ -419,17 +541,13 @@ button:hover, .get-started-button:hover {
 @media (max-width: 768px) {
   /* Reduce padding and margins for smaller screens */
   #home-page, #about-page, #dashboard, #signup-form, #login-form, #forgot-password-form {
-    padding: 10px;
+    padding: 30px;
     margin: 10px;
   }
 
   #dashboard-content {
     flex-direction: column;
     gap: 10px;
-  }
-
-  #dashboard-content > div {
-    min-width: 100%;
   }
 
   #logo img {
@@ -469,11 +587,10 @@ main {
 
 .profile-container {
   background-color: #fff;
-  padding: 20px;
+  padding: 40px 20px;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  max-width: 800px;
-  margin: 20px auto;
+  margin: 20px;
 }
 
 .profile-container h2 {
@@ -501,11 +618,6 @@ main {
 
 .profile-info button {
   margin-right: 10px;
-}
-
-/* Hidden Elements */
-.hidden {
-  display: none;
 }
 
 /* Forms */
@@ -587,8 +699,8 @@ input, select {
 
 /* Customization Styles */
 body {
-  margin: 0;
-  padding: 0;
+  margin: 15px ;
+  padding: 15px;
 }
 
 /* Light Theme */
@@ -692,9 +804,11 @@ body.wide-layout {
 
 /* Header Styles */
 header {
-  background-color: #f8f8f8;
-  padding: 10px;
-  border-bottom: 1px solid #ddd;
+  background-color: white;
+  padding: 40px 20px;
+  border-radius: 10px;
+  margin: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 #logo img {
@@ -771,8 +885,9 @@ button:hover {
 
 /* Footer Styles */
 footer {
-  background-color: #f8f8f8;
-  padding: 10px;
-  text-align: center;
-  border-top: 1px solid #ddd;
+  background-color: rgba(240, 240, 240, 0.9);
+  padding: 40px 20px;
+  border-radius: 10px;
+  margin: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
