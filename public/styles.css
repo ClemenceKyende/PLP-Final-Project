@@ -424,17 +424,25 @@ main {
   display: block;
   margin-bottom: 5px;
   font-weight: bold;
+  font-size: 16px;
+  color: #333;
 }
-
+ 
 .form-group input, .form-group select {
   width: 100%;
   border: 1px solid #ddd;
   background-color: #f9f9f9;
-  padding: 20px;
+  padding: 10px;  /* Adjusted padding */
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   margin-top: 20px;
-  height: 30px;
+  height: auto;  /* Adjusted height */
+  box-sizing: border-box; /* Include padding and border in height */
+}
+
+.form-group input::placeholder, 
+.form-group select::placeholder {
+  color: #888;  /* Ensure placeholder is visible */
 }
 
 .hidden {
