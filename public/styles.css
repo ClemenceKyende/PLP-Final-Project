@@ -659,11 +659,12 @@ footer {
   .profile-container {
     padding: 20px;
     min-width: 80%;
-    width: 100%;
+    width: 80%;
   }
 
   button {
     padding: 8px 16px;
+    margin: 8px
   }
 
   footer {
