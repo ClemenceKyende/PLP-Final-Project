@@ -658,6 +658,8 @@ footer {
 
   .profile-container {
     padding: 20px;
+    min-width: 80%;
+    width: 100%;
   }
 
   button {
