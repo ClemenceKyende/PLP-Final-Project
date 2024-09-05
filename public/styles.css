@@ -609,12 +609,20 @@ footer {
   text-align: center;
 }
 
-/* Small Devices (phones, 600px and down) */
+/* Global Styles for Box Sizing */
+*,
+*::before,
+*::after {
+  box-sizing: border-box; /* Ensure padding and borders are included in the element's width */
+}
+
+/* Small Devices (600px and below) */
 @media only screen and (max-width: 600px) {
   header {
     padding: 20px 10px;
     margin: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
   }
 
   #logo img {
@@ -622,8 +630,14 @@ footer {
     width: 150px;
   }
 
-  input[type="text"], input[type="email"], input[type="password"], input[type="datetime-local"] {
+  /* Ensure inputs fit the container */
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="datetime-local"] {
     padding: 8px;
+    width: 100%; 
+    margin-bottom: 10px;
   }
 
   #navigation-buttons {
@@ -631,75 +645,60 @@ footer {
     align-items: center;
   }
 
-  #navigation-buttons a, #navigation-buttons button {
-    margin: 5px 0;
-    padding: 8px 16px;
+  li {
+    padding: 8px; 
+    border-bottom: 1px solid #ddd; 
+    box-sizing: border-box; 
+    word-break: break-word; 
+    font-size: 14px; 
   }
 
+  /* Ensure containers are centered and content fits within them */
   #home-page, #about-page, #dashboard, #profile-page, #signup-form, #login-form, #forgot-password-form {
     padding: 10px;
-    margin: 10px;
-    min-width: 80%;
-    width: 100%;
-  }
-
-  .feature {
-    padding: 15px;
-  }
-
-  #dashboard-content > div {
-    min-width: 80%;
-  }
-
-  #pomodoro-duration {
-    width: 60px;
-  }
-
-  #reminders {
-    padding: 10px;
-  }
-
-  .profile-pic {
-    width: 120px;
-    height: 120px;
-  }
-
-  .profile-container {
-    padding: 20px;
-    min-width: 80%;
-    width: 80%;
+    margin: 10px auto; /* Centers the container */
+    max-width: 100%; /* Prevents overflow */
+    overflow-wrap: break-word; /* Breaks long words if necessary */
   }
 
   button {
     padding: 8px 16px;
-    margin: 8px
+    margin: 8px;
+    width: 100%; /* Ensures buttons take full width */
   }
 
   footer {
     padding: 15px;
-    margin: 5px;
     font-size: 12px;
   }
 
   .get-started-button {
     padding: 8px 16px;
     font-size: 14px;
+    width: 100%;
   }
 
-  #call-to-action {
-    padding: 20px 10px;
-    border-radius: 8px;
-    margin: 10px;
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+  .profile-pic {
+    width: 120px;
+    height: 120px;
+    display: block;
+    margin: 0 auto; /* Centers the profile picture */
+  }
+
+  #pomodoro-duration::-webkit-inner-spin-button,
+  #pomodoro-duration::-webkit-outer-spin-button {
+    width: 20px;
+    height: 20px;
   }
 }
 
-/* Medium Devices (tablets, 601px to 900px) */
+/* Medium Devices (601px to 900px) */
 @media only screen and (min-width: 601px) and (max-width: 900px) {
   header {
     padding: 30px 15px;
     margin: 15px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
   }
 
   #logo img {
@@ -707,49 +706,24 @@ footer {
     width: 175px;
   }
 
-  input[type="text"], input[type="email"], input[type="password"], input[type="datetime-local"] {
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="datetime-local"] {
     padding: 9px;
+    width: 100%;
   }
 
   #navigation-buttons {
     flex-direction: row;
-    flex-wrap: wrap;
     justify-content: center;
-  }
-
-  #navigation-buttons a, #navigation-buttons button {
-    margin: 8px;
-    padding: 10px 18px;
   }
 
   #home-page, #about-page, #dashboard, #profile-page, #signup-form, #login-form, #forgot-password-form {
     padding: 15px;
-    margin: 15px;
-  }
-
-  .feature {
-    padding: 18px;
-  }
-
-  #dashboard-content > div {
-    min-width: 300px;
-  }
-
-  #pomodoro-duration {
-    width: 70px;
-  }
-
-  #reminders {
-    padding: 15px;
-  }
-
-  .profile-pic {
-    width: 140px;
-    height: 140px;
-  }
-
-  .profile-container {
-    padding: 30px;
+    margin: 15px auto;
+    max-width: 90%; /* Keep the container within the screen size */
+    overflow-wrap: break-word;
   }
 
   button {
@@ -758,29 +732,28 @@ footer {
 
   footer {
     padding: 20px;
-    margin: 10px;
     font-size: 14px;
   }
 
-  .get-started-button {
-    padding: 10px 20px;
-    font-size: 15px;
+  .profile-pic {
+    width: 140px;
+    height: 140px;
+    display: block;
+    margin: 0 auto;
   }
 
-  #call-to-action {
-    padding: 30px 15px;
-    border-radius: 9px;
-    margin: 15px;
-    box-shadow: 0 0 9px rgba(0, 0, 0, 0.1);
+  #pomodoro-duration {
+    width: 70px;
   }
 }
 
-/* Large Devices (desktops, 901px and up) */
+/* Large Devices (901px and above) */
 @media only screen and (min-width: 901px) {
   header {
     padding: 40px 20px;
     margin: 20px;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    text-align: center;
   }
 
   #logo img {
@@ -788,47 +761,23 @@ footer {
     width: 200px;
   }
 
-  input[type="text"], input[type="email"], input[type="password"], input[type="datetime-local"] {
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="datetime-local"] {
     padding: 10px;
+    width: 100%;
   }
 
   #navigation-buttons {
     flex-direction: row;
   }
 
-  #navigation-buttons a, #navigation-buttons button {
-    margin: 10px;
-    padding: 10px 20px;
-  }
-
   #home-page, #about-page, #dashboard, #profile-page, #signup-form, #login-form, #forgot-password-form {
     padding: 20px;
-    margin: 20px;
-  }
-
-  .feature {
-    padding: 20px;
-  }
-
-  #dashboard-content > div {
-    min-width: 250px;
-  }
-
-  #pomodoro-duration {
-    width: 80px;
-  }
-
-  #reminders {
-    padding: 20px;
-  }
-
-  .profile-pic {
-    width: 150px;
-    height: 150px;
-  }
-
-  .profile-container {
-    padding: 40px;
+    margin: 20px auto;
+    max-width: 80%;
+    overflow-wrap: break-word;
   }
 
   button {
@@ -837,66 +786,26 @@ footer {
 
   footer {
     padding: 30px;
-    margin: 20px;
     font-size: 16px;
   }
 
-  .get-started-button {
-    padding: 12px 24px;
-    font-size: 16px;
+  .profile-pic {
+    width: 150px;
+    height: 150px;
+    display: block;
+    margin: 0 auto;
   }
 
-  #call-to-action {
-    padding: 40px 20px;
-    border-radius: 10px;
-    margin: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  }
-}
-
-/* Media query for smaller screens */
-@media (max-width: 600px) {
-  main {
-    padding: 10px;
-  }
-
-  #signup-form, #login-form, #resetpassword-form {
-    padding: 15px;
-    margin: 10px auto;
-  }
-
-  #signup-form button, #login-form button, #resetpassword-form button {
-    margin: 5px 0;
+  #pomodoro-duration {
+    width: 80px;
   }
 }
 
-/* Media query for smaller screens */
-@media (max-width: 600px) {
-  #pomodoro-duration::-webkit-inner-spin-button,
-  #pomodoro-duration::-webkit-outer-spin-button {
-    width: 20px; /* Adjust the size of the spinner arrows */
-    height: 20px;
-  }
-
-  input[type="number"]::-moz-inner-spin-button,
-  input[type="number"]::-moz-outer-spin-button {
-    width: 20px; /* Adjust the size of the spinner arrows */
-    height: 20px;
-  }
-}
-
-/* Media query for very small screens */
+/* Very small screens (400px and below) */
 @media (max-width: 400px) {
   #pomodoro-duration::-webkit-inner-spin-button,
   #pomodoro-duration::-webkit-outer-spin-button {
-    width: 15px; /* Further adjust the size for very small screens */
-    height: 15px;
-  }
-
-  input[type="number"]::-moz-inner-spin-button,
-  input[type="number"]::-moz-outer-spin-button {
-    width: 15px; /* Further adjust the size for very small screens */
+    width: 15px;
     height: 15px;
   }
 }
-
