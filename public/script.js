@@ -479,8 +479,10 @@ document.addEventListener('DOMContentLoaded', () => {
       taskContent += ` (Priority: ${task.level})`;
     }
 
-    listItem.textContent = taskContent;
+    const taskSpan = document.createElement('span');
+    taskSpan.textContent = taskContent;
 
+    // Create checkbox
     const checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
     checkbox.checked = task.completed || false;
@@ -488,14 +490,26 @@ document.addEventListener('DOMContentLoaded', () => {
       updateTask(taskType, task._id, { completed: checkbox.checked });
     });
 
+    // Create delete button
     const deleteButton = document.createElement('button');
     deleteButton.textContent = 'Delete';
     deleteButton.addEventListener('click', () => {
       deleteTask(taskType, task._id, listItem);
     });
 
+    // Create edit button
+    const editButton = document.createElement('button');
+    editButton.textContent = 'Edit';
+    editButton.addEventListener('click', () => {
+      // Handle editing of the task
+      editTask(taskType, task._id, listItem, taskSpan);
+    });
+
+    // Append everything to the list item
     listItem.prepend(checkbox);
-    listItem.appendChild(deleteButton);
+    listItem.appendChild(taskSpan);  // Add task content here
+    listItem.appendChild(editButton); // Add the edit button
+    listItem.appendChild(deleteButton); // Add the delete button
     listElement.appendChild(listItem);
   }
 
@@ -512,6 +526,43 @@ document.addEventListener('DOMContentLoaded', () => {
       .catch(error => console.error('Error updating task:', error));
   }
 
+  // Function to edit a task
+  function editTask(taskType, taskId, listItem, taskSpan) {
+    // Create an input field to edit the task text
+    const inputField = document.createElement('input');
+    inputField.type = 'text';
+    inputField.value = taskSpan.textContent; // Set current task text in input field
+    
+    // Create a save button
+    const saveButton = document.createElement('button');
+    saveButton.textContent = 'Save';
+
+    // Replace the task text with the input field
+    listItem.replaceChild(inputField, taskSpan);
+    listItem.appendChild(saveButton);
+
+    // When save is clicked, update the task
+    saveButton.addEventListener('click', () => {
+      const updatedTaskText = inputField.value;
+
+      // Send a PUT request to update the task on the server
+      fetch(`/api/tasks/${taskType}/${taskId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ text: updatedTaskText }),  // Update the task text
+      })
+        .then(response => response.json())
+        .then(updatedTask => {
+          // Replace input field with the updated task text
+          inputField.replaceWith(document.createTextNode(updatedTask.text));
+          saveButton.remove(); // Remove the save button after updating
+        })
+        .catch(error => console.error('Error updating task:', error));
+    });
+  }
+
   // Function to delete a task
   function deleteTask(taskType, taskId, listItem) {
     fetch(`/api/tasks/${taskType}/${taskId}`, {
@@ -523,7 +574,6 @@ document.addEventListener('DOMContentLoaded', () => {
       .catch(error => console.error('Error deleting task:', error));
   }
 });
-
 
 document.addEventListener('DOMContentLoaded', () => {
   const userId = 'user-id-placeholder'; // Replace this with the actual user ID
